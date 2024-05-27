@@ -19,7 +19,6 @@ export const lucia = new Lucia(adapter, {
     return {
       username: attributes.username,
       email: attributes.email,
-      password_hash: attributes.password_hash,
       avatar_url: attributes.avatar,
       mobile: attributes.mobile,
       first_name: attributes.first_name,
