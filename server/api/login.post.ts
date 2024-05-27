@@ -45,6 +45,13 @@ export default eventHandler(async (event) => {
     });
   }
 
+  if (existingUser.password_hash === null) {
+    throw createError({
+      message: "Incorrect email or password",
+      statusCode: 400,
+    });
+  }
+
   const validPassword = await verify(existingUser.password_hash, password, {
     memoryCost: 19456,
     timeCost: 2,
@@ -53,7 +60,7 @@ export default eventHandler(async (event) => {
   });
   if (!validPassword) {
     throw createError({
-      message: "Incoreect email or password",
+      message: "Incorrect email or password",
       statusCode: 400,
     });
   }

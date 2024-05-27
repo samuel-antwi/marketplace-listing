@@ -13,8 +13,6 @@ watch(
   },
   { immediate: true }
 );
-
-console.log(user.value);
 </script>
 
 <template>

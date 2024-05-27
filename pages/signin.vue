@@ -19,4 +19,8 @@ async function login(e: Event) {
     <br />
     <button>Continue</button>
   </form>
+  <div>
+    <h1>Sign in with Google</h1>
+    <a href="/login/google">Sign in with Google</a>
+  </div>
 </template>

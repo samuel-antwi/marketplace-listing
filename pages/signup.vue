@@ -11,7 +11,6 @@ async function signup(e: Event) {
   if (user.value) {
     router.push("/");
   }
-  console.log(formData);
 }
 </script>
 

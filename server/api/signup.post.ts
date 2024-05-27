@@ -34,7 +34,19 @@ export default eventHandler(async (event) => {
   });
   const userId = generateIdFromEntropySize(10); // 16 characters long
 
-  // TODO: check if username is already used
+  //check if username is already used
+  const user = await prisma.user.findUnique({
+    where: {
+      email: email.toString(),
+    },
+  });
+  if (user) {
+    throw createError({
+      message: "Email already in use",
+      statusCode: 400,
+    });
+  }
+
   await prisma.user.create({
     data: {
       id: userId,
