@@ -17,7 +17,8 @@ watch(
 
 <template>
   <div>
-    <h1>Hello world</h1>
+    <h4>Welcome back</h4>
+    <p>{{ user?.name }}</p>
     <sign-out />
   </div>
 </template>

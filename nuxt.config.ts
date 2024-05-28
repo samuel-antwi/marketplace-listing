@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  modules: ["@nuxt/ui", "@vueuse/nuxt", "@formkit/nuxt"],
   devtools: { enabled: true },
   runtimeConfig: {
     DATABASE_URL: process.env.DATABASE_URL,
@@ -10,5 +11,8 @@ export default defineNuxtConfig({
       SUPABASE_URL: process.env.SUPABASE_URL,
       SUPABASE_KEY: process.env.SUPABASE_KEY,
     },
+  },
+  colorMode: {
+    preference: "light",
   },
 });
