@@ -4,16 +4,18 @@ import { generateIdFromEntropySize } from "lucia";
 import { prisma } from "../../utils/prisma";
 
 export default eventHandler(async (event) => {
-  const formData = await readFormData(event);
-  const email = formData.get("email");
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!email || !emailRegex.test(email.toString())) {
+  const formData = await readBody(event);
+  const email = formData.email;
+  const firstName = formData.given_name;
+  const lastName = formData.family_name;
+
+  if (!email || !firstName || !lastName) {
     throw createError({
-      message: "Invalid email",
+      message: "Missing required fields",
       statusCode: 400,
     });
   }
-  const password = formData.get("password");
+  const password = formData.password;
   if (
     typeof password !== "string" ||
     password.length < 6 ||
@@ -51,6 +53,8 @@ export default eventHandler(async (event) => {
     data: {
       id: userId,
       email: email.toString(),
+      given_name: firstName.toString(),
+      family_name: lastName.toString(),
       password_hash: passwordHash,
     },
   });

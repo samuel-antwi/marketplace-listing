@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import { useUser } from "~/composables/Auth/auth";
-import { signupValidationSchema } from "@/lib/shema";
-import useFormaValidate from "../composables/useFormValidate";
-import { first } from "lodash-es";
+import { authSchema } from "@/lib/shema";
+import { z } from "zod";
+import type { FormSubmitEvent } from "#ui/types";
 
 definePageMeta({
   layout: "auth",
@@ -11,36 +10,31 @@ definePageMeta({
 const userDetails = ref({
   email: "",
   password: "",
-  first_name: "",
-  last_name: "",
+  given_name: "",
+  family_name: "",
 });
-const { validate, errors, isValid, getError, scrolltoError } = useFormaValidate(
-  signupValidationSchema,
-  userDetails.value,
-  {
-    mode: "eager",
-  }
-);
-const router = useRouter();
-const user = useUser();
-async function signup(e: Event) {
-  await validate();
-  if (isValid.value) {
-    const formData = new FormData(e.target as HTMLFormElement);
+const isSubmiting = ref(false);
+
+type Schema = z.output<typeof authSchema>;
+
+async function signup(event: FormSubmitEvent<Schema>) {
+  isSubmiting.value = true;
+  try {
     await $fetch("/api/signup", {
       method: "POST",
-      body: formData,
+      body: userDetails.value,
     });
-    if (user.value) {
-      router.push("/");
-    }
+    await navigateTo("/");
+    isSubmiting.value = false;
+  } catch (e) {
+    console.error(e);
   }
 }
 </script>
 
 <template>
   <div
-    class="shadow-md w-full border rounded-xl flex flex-col justify-center items-center p-5 md:p-8"
+    class="shadow-md bg-white w-full border rounded-xl flex flex-col justify-center items-center p-5 md:p-8"
   >
     <div>
       <div class="mb-4 text-center">
@@ -49,57 +43,72 @@ async function signup(e: Event) {
           Welcome! Please fill in the details to get started.
         </p>
       </div>
-      <form method="post" action="/api/signup" @submit.prevent="signup">
+      <UForm :schema="authSchema" :state="userDetails" @submit="signup">
         <div class="flex space-x-4 mb-5">
           <div>
-            <label htmlFor="email">First name</label>
-            <UInput
-              :class="{ 'border-red-400': !!getError('email') }"
-              v-model="userDetails.first_name"
-              name="first_name"
-              id="first_name"
-              size="sm"
-            />
+            <UFormGroup label="First name" name="given_name">
+              <UInput
+                name="given_name"
+                id="given_name"
+                size="lg"
+                v-model="userDetails.given_name"
+              />
+            </UFormGroup>
           </div>
           <div>
-            <label htmlFor="email">Last name</label>
-            <UInput
-              :class="{ 'border-red-400': !!getError('email') }"
-              v-model="userDetails.last_name"
-              name="first_name"
-              id="first_name"
-              size="sm"
-            />
+            <UFormGroup label="Last name" name="family_name">
+              <UInput
+                v-model="userDetails.family_name"
+                name="family_name"
+                id="family_name"
+                size="lg"
+              />
+            </UFormGroup>
           </div>
         </div>
         <div class="mb-5">
-          <label htmlFor="email">Email</label>
-          <UInput
-            :class="{ 'border-red-400': !!getError('email') }"
-            v-model="userDetails.email"
-            name="email"
-            id="email"
-            size="sm"
-          />
+          <UFormGroup label="Email" name="email">
+            <UInput
+              icon="i-mdi-email"
+              v-model="userDetails.email"
+              name="email"
+              id="email"
+              size="lg"
+            />
+          </UFormGroup>
         </div>
         <div>
-          <label htmlFor="email">Password</label>
-          <UInput
-            :ui="{ 'border-red-400': !!getError('email') }"
-            v-model="userDetails.password"
-            name="password"
-            id="password"
-            size="sm"
-          />
+          <UFormGroup label="Password" name="password">
+            <UInput
+              icon="i-mdi-lock"
+              v-model="userDetails.password"
+              name="password"
+              id="password"
+              size="lg"
+              type="password"
+              autocomplete="new-password"
+            />
+          </UFormGroup>
         </div>
         <UButton
+          :disabled="isSubmiting"
+          :loading="isSubmiting"
           block
           label="Continue"
           type="submit"
           class="mt-5 w-full"
-          :disabled="!isValid"
+          size="lg"
         />
-      </form>
+      </UForm>
+      <UDivider class="mt-5" />
+      <div class="flex items-center mt-5 justify-end">
+        <div class="text-sm">
+          <NuxtLink to="/signin" class="tracking-wide">
+            Already have an account?
+            <span class="text-primary-500">Sign in</span>
+          </NuxtLink>
+        </div>
+      </div>
     </div>
   </div>
 </template>

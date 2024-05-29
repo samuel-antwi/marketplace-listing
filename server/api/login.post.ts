@@ -3,25 +3,12 @@ import { verify } from "@node-rs/argon2";
 import { prisma } from "../../utils/prisma";
 
 export default eventHandler(async (event) => {
-  const formData = await readFormData(event);
-  const email = formData.get("email");
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!email || !emailRegex.test(email.toString())) {
-    throw createError({
-      message: "Invalid email",
-      statusCode: 400,
-    });
-  }
-  const password = formData.get("password");
-  if (
-    typeof password !== "string" ||
-    password.length < 6 ||
-    password.length > 255
-  ) {
-    throw createError({
-      message: "Invalid password",
-      statusCode: 400,
-    });
+  const formData = await readBody(event);
+  const email = formData.email;
+  const password = formData.password;
+
+  if (!email || !password) {
+    return;
   }
 
   const existingUser = await prisma.user.findFirst({

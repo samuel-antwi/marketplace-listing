@@ -22,13 +22,11 @@ export const lucia = new Lucia(adapter, {
       email: attributes.email,
       avatar_url: attributes.avatar,
       mobile: attributes.mobile,
-      first_name: attributes.first_name,
-      last_name: attributes.last_name,
+      given_name: attributes.given_name,
+      family_name: attributes.family_name,
       google_id: attributes.google_id,
       email_verified: attributes.email_verified,
       name: attributes.name,
-      given_name: attributes.given_name,
-      family_name: attributes.family_name,
       picture: attributes.picture,
     };
   },
@@ -48,23 +46,24 @@ interface DatabaseUserAttributes {
   password_hash: string;
   avatar: string;
   mobile: string;
-  first_name: string;
-  last_name: string;
+  given_name: string;
+  family_name: string;
   google_id: string;
   email_verified: boolean;
   name: string;
-  given_name: string;
-  family_name: string;
   picture: string;
 }
 
 const runtimeConfig = useRuntimeConfig();
-const redirectURI = "http://localhost:3000/login/google/callback";
+const redirectURI =
+  process.env.NODE_ENV === "production"
+    ? process.env.GOOGLE_REDIRECT_URI_PROD
+    : process.env.GOOGLE_REDIRECT_URI_DEV;
 
 const GOOGLE_CLIENT_ID = runtimeConfig.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = runtimeConfig.GOOGLE_CLIENT_SECRET;
 export const google = new Google(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
-  redirectURI
+  redirectURI as string
 );
