@@ -2,7 +2,7 @@
 import { Lucia } from "lucia";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { PrismaClient } from "@prisma/client";
-import { Google } from "arctic";
+import { Facebook, Google } from "arctic";
 
 const client = new PrismaClient();
 
@@ -62,8 +62,18 @@ const redirectURI =
 
 const GOOGLE_CLIENT_ID = runtimeConfig.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = runtimeConfig.GOOGLE_CLIENT_SECRET;
+
+const FACEBOOK_CLIENT_ID = runtimeConfig.FACEBOOK_CLIENT_ID;
+const FACEBOOK_CLIENT_SECRET = runtimeConfig.FACEBOOK_CLIENT_SECRET;
+
 export const google = new Google(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
+  redirectURI as string
+);
+
+export const facebook = new Facebook(
+  FACEBOOK_CLIENT_ID,
+  FACEBOOK_CLIENT_SECRET,
   redirectURI as string
 );

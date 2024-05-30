@@ -15,16 +15,6 @@ const isSubmiting = ref(false);
 
 type Schema = z.output<typeof loginSchema>;
 
-const signinWithGoogle = async () => {
-  try {
-    await $fetch("/api/login/google", {
-      method: "POST",
-    });
-  } catch (e) {
-    console.error(e);
-  }
-};
-
 async function signup(event: FormSubmitEvent<Schema>) {
   isSubmiting.value = true;
   try {

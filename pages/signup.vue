@@ -37,11 +37,14 @@ async function signup(event: FormSubmitEvent<Schema>) {
     class="shadow-md bg-white w-full border rounded-xl flex flex-col justify-center items-center p-5 md:p-8"
   >
     <div>
-      <div class="mb-4 text-center">
+      <div class="mb-7 text-center">
         <h1 class="font-semibold text-xl mb-2">Create your account</h1>
         <p class="text-gray-600 text-sm">
           Welcome! Please fill in the details to get started.
         </p>
+      </div>
+      <div>
+        <auth-social-login />
       </div>
       <UForm :schema="authSchema" :state="userDetails" @submit="signup">
         <div class="flex space-x-4 mb-5">

@@ -14,9 +14,9 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 // USER
-model User {
+model user {
   id       String    @id
-  sessions Session[]
+  session session[]
   password_hash String?
   username String? @unique
   email    String?    @unique
@@ -27,12 +27,24 @@ model User {
   given_name String?
   family_name String?
   picture String?
+  email_verification_token email_verification_token[]
+
+}
+
+model email_verification_token{
+  id String @id
+  userId String
+  expiresAt DateTime
+  user user @relation(fields: [userId], references: [id])
+  email String
+  
+
 }
 
 //SESSION
-model Session {
+model session {
   id        String   @id
   userId    String
   expiresAt DateTime
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      user     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }

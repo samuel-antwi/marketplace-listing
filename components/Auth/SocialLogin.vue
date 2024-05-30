@@ -9,7 +9,7 @@ const loginWithProvider = (provider: string) => {
 <template>
   <div>
     <div class="flex justify-between space-x-4 items-center">
-      <button @click="loginWithProvider('/login/google')">
+      <button @click="loginWithProvider('/login/facebook')">
         <facebook-icon />
         <span>Facebook</span>
       </button>

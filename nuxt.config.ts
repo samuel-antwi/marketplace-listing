@@ -10,6 +10,8 @@ export default defineNuxtConfig({
     public: {
       SUPABASE_URL: process.env.SUPABASE_URL,
       SUPABASE_KEY: process.env.SUPABASE_KEY,
+      FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
+      FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
       GOOGLE_REDIRECT_URI_DEV: process.env.GOOGLE_REDIRECT_URI_DEV,
       GOOGLE_REDIRECT_URI_PROD: process.env.GOOGLE_REDIRECT_URI_PROD,
     },
