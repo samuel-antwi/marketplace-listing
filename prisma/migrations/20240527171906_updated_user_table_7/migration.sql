@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "User" ALTER COLUMN "password_hash" DROP NOT NULL,
-ALTER COLUMN "email" DROP NOT NULL;

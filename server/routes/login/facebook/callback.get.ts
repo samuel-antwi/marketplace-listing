@@ -62,7 +62,6 @@ export default defineEventHandler(async (event) => {
     );
     return sendRedirect(event, "/");
   } catch (e) {
-    console.error("Error during Google Auth:", e);
     if (e instanceof OAuth2RequestError) {
       // invalid code
       throw createError({

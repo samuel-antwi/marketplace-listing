@@ -2,6 +2,8 @@
 import { hash } from "@node-rs/argon2";
 import { generateIdFromEntropySize } from "lucia";
 import { prisma } from "../../utils/prisma";
+import { generateEmailVerificationCode } from "../utils/emailVerificationCode";
+import { sendVerificationEmail } from "../utils/emailServices";
 
 export default eventHandler(async (event) => {
   const formData = await readBody(event);
@@ -58,6 +60,8 @@ export default eventHandler(async (event) => {
       password_hash: passwordHash,
     },
   });
+  const verificationCode = await generateEmailVerificationCode(userId, email);
+  await sendVerificationEmail(email, verificationCode);
 
   const session = await lucia.createSession(userId, {});
   appendHeader(

@@ -27,24 +27,23 @@ model user {
   given_name String?
   family_name String?
   picture String?
-  email_verification_token email_verification_token[]
+  email_verification_token email_verification_code[]
 
 }
 
-model email_verification_token{
-  id String @id
+model email_verification_code{
+  id String @id 
   userId String
-  expiresAt DateTime
   user user @relation(fields: [userId], references: [id])
   email String
-  
-
+  code String
+  expiresAt DateTime
 }
 
 //SESSION
 model session {
   id        String   @id
-  userId    String
-  expiresAt DateTime
+  userId   String
   user      user     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  expiresAt DateTime
 }
