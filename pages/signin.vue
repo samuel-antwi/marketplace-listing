@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { loginSchema } from "@/lib/shema";
+import { loginSchema } from "@/lib/schema";
 import { z } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
 

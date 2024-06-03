@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { authSchema } from "@/lib/shema";
+import { authSchema } from "@/lib/schema";
 import { z } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
 
@@ -13,23 +13,34 @@ const userDetails = ref({
   given_name: "",
   family_name: "",
 });
-const isSubmiting = ref(false);
+const isSubmitting = ref(false);
 const errorMsg = ref("");
+const toast = useToast();
 
 type Schema = z.output<typeof authSchema>;
 
 async function signup(event: FormSubmitEvent<Schema>) {
-  isSubmiting.value = true;
+  isSubmitting.value = true;
+  errorMsg.value = "";
+
   try {
     await $fetch("/api/signup", {
       method: "POST",
       body: userDetails.value,
     });
+    isSubmitting.value = false;
     await navigateTo("/verify-email");
-    isSubmiting.value = false;
-  } catch (e) {
-    console.log(e.message);
-    errorMsg.value = e.message;
+  } catch (e: any) {
+    isSubmitting.value = false;
+    if (e.data?.message) {
+      if (e.data.statusCode === 400) {
+        errorMsg.value = e.data.message;
+      } else {
+        toast.add({ title: e.data.message, timeout: 0 });
+      }
+    } else {
+      errorMsg.value = "An unexpected error occurred. Please try again.";
+    }
   }
 }
 </script>
@@ -81,6 +92,10 @@ async function signup(event: FormSubmitEvent<Schema>) {
               size="lg"
             />
           </UFormGroup>
+          <div v-if="errorMsg" class="text-sm flex items-center text-red-500">
+            <UIcon name="i-mdi-alert-circle" class="mr-1" />
+            {{ errorMsg }}
+          </div>
         </div>
         <div>
           <UFormGroup label="Password" name="password">
@@ -96,8 +111,8 @@ async function signup(event: FormSubmitEvent<Schema>) {
           </UFormGroup>
         </div>
         <UButton
-          :disabled="isSubmiting"
-          :loading="isSubmiting"
+          :disabled="isSubmitting"
+          :loading="isSubmitting"
           block
           label="Continue"
           type="submit"

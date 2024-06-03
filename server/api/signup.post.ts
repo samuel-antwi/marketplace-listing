@@ -6,38 +6,47 @@ import { sendVerificationEmail } from "../utils/emailServices";
 
 export default eventHandler(async (event) => {
   const formData = await readBody(event);
-  const email = formData.email;
-  const firstName = formData.given_name;
-  const lastName = formData.family_name;
+  const {
+    email,
+    given_name: firstName,
+    family_name: lastName,
+    password,
+  } = formData;
 
-  if (!email || !firstName || !lastName) {
+  // Check for missing required fields
+  if (!email || !firstName || !lastName || !password) {
     throw createError({
-      message: "Missing required fields",
+      message:
+        "Missing required fields: email, given_name, family_name, or password",
       statusCode: 400,
     });
   }
-  const password = formData.password;
+
+  // Validate password
   if (
     typeof password !== "string" ||
     password.length < 6 ||
     password.length > 255
   ) {
     throw createError({
-      message: "Invalid password",
+      message:
+        "Invalid password. It must be a string between 6 and 255 characters.",
       statusCode: 400,
     });
   }
 
+  // Hash the password
   const passwordHash = await hash(password, {
-    // recommended minimum parameters
     memoryCost: 19456,
     timeCost: 2,
     outputLen: 32,
     parallelism: 1,
   });
+
+  // Generate a user ID
   const userId = generateIdFromEntropySize(10); // 16 characters long
 
-  //check if email is already used
+  // Check if email is already used
   const emailRegistered = await prisma.user.findUnique({
     where: {
       email: email.toString(),
@@ -45,11 +54,12 @@ export default eventHandler(async (event) => {
   });
   if (emailRegistered) {
     throw createError({
-      message: "Email already in use",
+      message: "A user with this email address already exists",
       statusCode: 400,
     });
   }
 
+  // Create the user in the database
   await prisma.user.create({
     data: {
       id: userId,
@@ -74,10 +84,11 @@ export default eventHandler(async (event) => {
     });
   }
 
+  // Generate and send verification code
   const verificationCode = await generateEmailVerificationCode(userId, email);
-
   await sendVerificationEmail(email, verificationCode, user as any);
 
+  // Create a session
   const session = await lucia.createSession(userId, {});
   appendHeader(
     event,
