@@ -20,11 +20,9 @@ export const lucia = new Lucia(adapter, {
     return {
       username: attributes.username,
       email: attributes.email,
-      avatar_url: attributes.avatar,
       mobile: attributes.mobile,
       given_name: attributes.given_name,
       family_name: attributes.family_name,
-      google_id: attributes.google_id,
       email_verified: attributes.email_verified,
       name: attributes.name,
       picture: attributes.picture,
@@ -44,11 +42,9 @@ interface DatabaseUserAttributes {
   username: string;
   email: string;
   password_hash: string;
-  avatar: string;
   mobile: string;
   given_name: string;
   family_name: string;
-  google_id: string;
   email_verified: boolean;
   name: string;
   picture: string;

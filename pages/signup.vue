@@ -14,6 +14,7 @@ const userDetails = ref({
   family_name: "",
 });
 const isSubmiting = ref(false);
+const errorMsg = ref("");
 
 type Schema = z.output<typeof authSchema>;
 
@@ -24,10 +25,11 @@ async function signup(event: FormSubmitEvent<Schema>) {
       method: "POST",
       body: userDetails.value,
     });
-    await navigateTo("/");
+    await navigateTo("/verify-email");
     isSubmiting.value = false;
   } catch (e) {
-    console.error(e);
+    console.log(e.message);
+    errorMsg.value = e.message;
   }
 }
 </script>

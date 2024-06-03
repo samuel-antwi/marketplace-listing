@@ -21,14 +21,12 @@ model user {
   username String? @unique
   email    String?    @unique
   mobile   String?
-  avatar_url String? 
   email_verified Boolean @default(false)
   name String?
   given_name String?
   family_name String?
   picture String?
   email_verification_token email_verification_code[]
-
 }
 
 model email_verification_code{

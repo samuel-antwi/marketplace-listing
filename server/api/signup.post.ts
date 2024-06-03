@@ -1,4 +1,3 @@
-// server/api/signup.post.ts
 import { hash } from "@node-rs/argon2";
 import { generateIdFromEntropySize } from "lucia";
 import { prisma } from "../../utils/prisma";
@@ -38,13 +37,13 @@ export default eventHandler(async (event) => {
   });
   const userId = generateIdFromEntropySize(10); // 16 characters long
 
-  //check if username is already used
-  const user = await prisma.user.findUnique({
+  //check if email is already used
+  const emailRegistered = await prisma.user.findUnique({
     where: {
       email: email.toString(),
     },
   });
-  if (user) {
+  if (emailRegistered) {
     throw createError({
       message: "Email already in use",
       statusCode: 400,
@@ -60,8 +59,24 @@ export default eventHandler(async (event) => {
       password_hash: passwordHash,
     },
   });
+
+  // Fetch the user from the database
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!user) {
+    throw createError({
+      message: "User creation failed",
+      statusCode: 500,
+    });
+  }
+
   const verificationCode = await generateEmailVerificationCode(userId, email);
-  await sendVerificationEmail(email, verificationCode);
+
+  await sendVerificationEmail(email, verificationCode, user as any);
 
   const session = await lucia.createSession(userId, {});
   appendHeader(

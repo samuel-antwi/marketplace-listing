@@ -1,6 +1,7 @@
 import { generateRandomString, alphabet } from "oslo/crypto";
 import { prisma } from "../../utils/prisma";
 import { TimeSpan, createDate } from "oslo";
+import { generateIdFromEntropySize } from "lucia";
 
 export async function generateEmailVerificationCode(
   userId: string,
@@ -24,11 +25,12 @@ export async function generateEmailVerificationCode(
 
   // Generate a new verification code
   const code = generateRandomString(6, alphabet("0-9"));
+  const id = generateIdFromEntropySize(10);
 
   // Create a new record with the new verification code
   await prisma.email_verification_code.create({
     data: {
-      id: userId,
+      id: id,
       userId: userId,
       email: email,
       code: code,
