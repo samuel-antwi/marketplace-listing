@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { useUser } from "~/composables/Auth/auth";
 const verificationCode = ref("");
+const toast = useToast();
 
 const verifyCode = async () => {
   try {
@@ -20,25 +21,26 @@ const verifyCode = async () => {
 
 const resendVerificationEmail = async () => {
   try {
-    // Replace with your API call to resend verification email
-    await fetch("/api/resend-verification-email", { method: "POST" });
-    alert("Verification email resent. Please check your inbox.");
+    await $fetch("/api/resend-verification-code", { method: "POST" });
+    toast.add({
+      title: "Verification email has been resent. Please check your inbox.",
+      timeout: 5000,
+    });
   } catch (error) {
     console.error("Failed to resend verification email:", error);
-    alert("Failed to resend verification email. Please try again later.");
   }
 };
 
 const user = useUser();
-watch(
-  user,
-  () => {
-    if (user?.value?.email_verified) {
-      return navigateTo("/");
-    }
-  },
-  { immediate: true }
-);
+// watch(
+//   user,
+//   () => {
+//     if (user?.value?.email_verified) {
+//       return navigateTo("/");
+//     }
+//   },
+//   { immediate: true }
+// );
 </script>
 
 <template>
@@ -59,7 +61,13 @@ watch(
         <UButton size="lg" type="submit" block> Verify </UButton>
       </form>
       <div class="mt-5">
-        <UButton size="lg" @click="resendVerificationEmail" block color="gray">
+        <UButton
+          type="button"
+          size="lg"
+          @click="resendVerificationEmail"
+          block
+          color="gray"
+        >
           Resend Verification Email
         </UButton>
       </div>
