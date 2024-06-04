@@ -41,11 +41,8 @@ const user = useUser();
 watch(
   user,
   () => {
-    if (!user?.value) {
+    if (!user?.value || user.value.email_verified) {
       return navigateTo("/");
-    }
-    if (user.value) {
-      return navigateTo("/account");
     }
   },
   { immediate: true }
