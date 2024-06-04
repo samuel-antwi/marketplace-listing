@@ -2,18 +2,15 @@ import { prisma } from "./../../utils/prisma";
 import { generateEmailVerificationCode } from "../utils/emailVerificationCode";
 import { sendVerificationEmail } from "../utils/emailServices";
 
+const RATE_LIMIT_TIME_FRAME = 60 * 1000; // 1 minute
+const MAX_EMAILS_PER_TIME_FRAME = 1;
+
 export default defineEventHandler(async (event) => {
   const user = event.context.user;
-
-  console.log("USER", user);
-  console.log("NODE", event.node.req.headers);
-
-  if (user?.email_verified) {
-    throw createError({
-      message: "Your email is already verified",
-      statusCode: 401,
-    });
-  }
+  const ipAddress =
+    event.node.req.headers["x-forwarded-for"] ||
+    event.node.req.connection.remoteAddress ||
+    "";
 
   if (!user) {
     throw createError({
@@ -22,32 +19,50 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  // Check for missing required fields
-  if (!user.email) {
+  if (user.email_verified) {
     throw createError({
-      message: "Missing email address",
-      statusCode: 400,
+      message: "Your email is already verified",
+      statusCode: 401,
     });
   }
 
-  const databaseCode = await prisma.email_verification_code.findFirst({
-    where: { userId: user.id },
+  const now = new Date();
+
+  // Fetch requests from the database within the rate limit time frame for both user ID and IP address
+  const recentRequests = await prisma.email_verification_code.findMany({
+    where: {
+      OR: [
+        {
+          userId: user.id,
+          createdAt: { gte: new Date(now.getTime() - RATE_LIMIT_TIME_FRAME) },
+        },
+        {
+          ipAddress: ipAddress?.toString(),
+          createdAt: { gte: new Date(now.getTime() - RATE_LIMIT_TIME_FRAME) },
+        },
+      ],
+    },
   });
 
-  if (!databaseCode) {
-    return false;
+  if (recentRequests.length >= MAX_EMAILS_PER_TIME_FRAME) {
+    throw createError({
+      message: "Too many requests. Please try again later.",
+      statusCode: 429,
+    });
   }
 
-  await prisma.email_verification_code.delete({
+  // Clean up old requests (optional but recommended)
+  await prisma.email_verification_code.deleteMany({
     where: {
-      id: databaseCode.id,
+      createdAt: { lt: new Date(now.getTime() - RATE_LIMIT_TIME_FRAME) },
     },
   });
 
   // Generate a new verification code
   const verificationCode = await generateEmailVerificationCode(
     user.id,
-    user.email
+    user.email,
+    ipAddress?.toString()
   );
 
   // Send the verification email

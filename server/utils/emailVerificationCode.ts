@@ -5,7 +5,8 @@ import { generateIdFromEntropySize } from "lucia";
 
 export async function generateEmailVerificationCode(
   userId: string,
-  email: string
+  email: string,
+  ipAddress: string
 ): Promise<string> {
   // Check if a record exists for the given userId
   const existingRecord = await prisma.email_verification_code.findUnique({
@@ -35,6 +36,8 @@ export async function generateEmailVerificationCode(
       email: email,
       code: code,
       expiresAt: createDate(new TimeSpan(15, "m")),
+      ipAddress: ipAddress,
+      createdAt: new Date(),
     },
   });
 

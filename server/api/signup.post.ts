@@ -4,8 +4,12 @@ import { prisma } from "../../utils/prisma";
 import { generateEmailVerificationCode } from "../utils/emailVerificationCode";
 import { sendVerificationEmail } from "../utils/emailServices";
 
-export default eventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   const formData = await readBody(event);
+  const ipAddress =
+    event.node.req.headers["x-forwarded-for"] ||
+    event.node.req.connection.remoteAddress ||
+    "";
   const {
     email,
     given_name: firstName,
@@ -85,7 +89,11 @@ export default eventHandler(async (event) => {
   }
 
   // Generate and send verification code
-  const verificationCode = await generateEmailVerificationCode(userId, email);
+  const verificationCode = await generateEmailVerificationCode(
+    userId,
+    email,
+    ipAddress.toString()
+  );
   await sendVerificationEmail(email, verificationCode, user as any);
 
   // Create a session

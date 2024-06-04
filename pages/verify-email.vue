@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { useUser } from "~/composables/Auth/auth";
 const verificationCode = ref("");
 const toast = useToast();
+const isLoading = ref(false);
 
 const verifyCode = async () => {
+  isLoading.value = true;
   try {
     await $fetch("/api/email-verification", {
       method: "POST",
@@ -14,8 +15,10 @@ const verifyCode = async () => {
       body: JSON.stringify({ code: verificationCode.value }),
     });
     await navigateTo("/");
+    isLoading.value = false;
   } catch (error) {
     console.error("Failed to verify code:", error);
+    isLoading.value = false;
   }
 };
 
@@ -23,8 +26,11 @@ const resendVerificationEmail = async () => {
   try {
     await $fetch("/api/resend-verification-code", { method: "POST" });
     toast.add({
-      title: "Verification email has been resent. Please check your inbox.",
+      title: "Success",
+      description:
+        "Verification email has been resent. Please check your inbox.",
       timeout: 5000,
+      color: "green",
     });
   } catch (error) {
     console.error("Failed to resend verification email:", error);
@@ -32,15 +38,18 @@ const resendVerificationEmail = async () => {
 };
 
 const user = useUser();
-// watch(
-//   user,
-//   () => {
-//     if (user?.value?.email_verified) {
-//       return navigateTo("/");
-//     }
-//   },
-//   { immediate: true }
-// );
+watch(
+  user,
+  () => {
+    if (!user?.value) {
+      return navigateTo("/");
+    }
+    if (user.value) {
+      return navigateTo("/account");
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -58,10 +67,13 @@ const user = useUser();
           placeholder="Verification Code"
           class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
-        <UButton size="lg" type="submit" block> Verify </UButton>
+        <UButton :loading="isLoading" size="lg" type="submit" block>
+          Verify
+        </UButton>
       </form>
       <div class="mt-5">
         <UButton
+          :loading="isLoading"
           type="button"
           size="lg"
           @click="resendVerificationEmail"
@@ -74,7 +86,3 @@ const user = useUser();
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Additional styles if needed */
-</style>

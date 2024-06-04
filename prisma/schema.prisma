@@ -36,6 +36,10 @@ model email_verification_code{
   email String
   code String
   expiresAt DateTime
+  ipAddress String
+  createdAt DateTime @default(now())
+  @@index([userId, createdAt])
+  @@index([ipAddress, createdAt])
 }
 
 //SESSION
