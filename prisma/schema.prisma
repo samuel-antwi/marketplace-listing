@@ -27,6 +27,7 @@ model user {
   family_name String?
   picture String?
   email_verification_token email_verification_code[]
+  password_reset_token password_reset_token[]
 }
 
 model email_verification_code{
@@ -40,6 +41,18 @@ model email_verification_code{
   createdAt DateTime @default(now())
   @@index([userId, createdAt])
   @@index([ipAddress, createdAt])
+}
+
+model password_reset_token{
+  id String @id
+  userId String
+  user user @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  ipAddress String
+  createdAt DateTime @default(now())
+  @@index([userId, createdAt])
+  @@index([ipAddress, createdAt])
+
 }
 
 //SESSION

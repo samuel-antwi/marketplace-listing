@@ -70,6 +70,7 @@ export default defineEventHandler(async (event) => {
       email: email.toString(),
       given_name: firstName.toString(),
       family_name: lastName.toString(),
+      name: `${firstName} ${lastName}`,
       password_hash: passwordHash,
     },
   });
