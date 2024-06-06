@@ -22,7 +22,7 @@ const verifyCode = async () => {
   }
 };
 
-const resendVerificationEmail = async () => {
+const resendEmailVerificationToken = async () => {
   try {
     await $fetch("/api/resend-verification-code", { method: "POST" });
     toast.add({
@@ -64,7 +64,7 @@ watch(
           placeholder="Verification Code"
           class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
-        <UButton :loading="isLoading" size="lg" type="submit" block>
+        <UButton trailing :loading="isLoading" size="lg" type="submit" block>
           Verify
         </UButton>
       </form>
@@ -73,9 +73,10 @@ watch(
           :loading="isLoading"
           type="button"
           size="lg"
-          @click="resendVerificationEmail"
+          @click="resendEmailVerificationToken"
           block
           color="gray"
+          trailing
         >
           Resend Verification Email
         </UButton>

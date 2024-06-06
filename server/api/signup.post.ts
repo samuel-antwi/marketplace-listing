@@ -2,7 +2,7 @@ import { hash } from "@node-rs/argon2";
 import { generateIdFromEntropySize } from "lucia";
 import { prisma } from "../../utils/prisma";
 import { generateEmailVerificationCode } from "../utils/emailVerificationCode";
-import { sendVerificationEmail } from "../utils/emailServices";
+import { sendEmailVerificationToken } from "../utils/email-services/sendEmailVerificationToken";
 
 export default defineEventHandler(async (event) => {
   const formData = await readBody(event);
@@ -95,7 +95,7 @@ export default defineEventHandler(async (event) => {
     email,
     ipAddress.toString()
   );
-  await sendVerificationEmail(email, verificationCode, user as any);
+  await sendEmailVerificationToken(email, verificationCode, user as any);
 
   // Create a session
   const session = await lucia.createSession(userId, {});

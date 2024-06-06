@@ -45,6 +45,7 @@ model email_verification_code{
 
 model password_reset_token{
   id String @id
+  token_hash String @unique
   userId String
   user user @relation(fields: [userId], references: [id])
   expiresAt DateTime

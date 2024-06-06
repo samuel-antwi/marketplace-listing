@@ -6,7 +6,7 @@ const apiKey = config.SENDGRID_API_KEY;
 
 sgMail.setApiKey(apiKey);
 
-export async function sendVerificationEmail(
+export async function sendEmailVerificationToken(
   email: string,
   code: string,
   user: User

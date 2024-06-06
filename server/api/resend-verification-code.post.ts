@@ -1,6 +1,6 @@
 import { prisma } from "./../../utils/prisma";
 import { generateEmailVerificationCode } from "../utils/emailVerificationCode";
-import { sendVerificationEmail } from "../utils/emailServices";
+import { sendEmailVerificationToken } from "../utils/email-services/sendEmailVerificationToken";
 
 const RATE_LIMIT_TIME_FRAME = 60 * 1000; // 1 minute
 const MAX_EMAILS_PER_TIME_FRAME = 1;
@@ -66,7 +66,7 @@ export default defineEventHandler(async (event) => {
   );
 
   // Send the verification email
-  await sendVerificationEmail(user.email, verificationCode, user as any);
+  await sendEmailVerificationToken(user.email, verificationCode, user as any);
 
   // Respond to the client
   return {
