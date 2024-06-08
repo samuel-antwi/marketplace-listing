@@ -22,6 +22,7 @@ const sendResetEmail = async () => {
       color: "green",
       timeout: 0,
     });
+    email.value = "";
     isSubmitting.value = false;
   } catch (error) {
     console.error("Failed to send reset email:", error);
@@ -42,6 +43,7 @@ const sendResetEmail = async () => {
           type="email"
           v-model="email"
           placeholder="Email Address"
+          required
         />
 
         <UButton

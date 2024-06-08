@@ -1,5 +1,5 @@
 import sgMail from "@sendgrid/mail";
-import { User } from "lucia";
+import type { User } from "lucia";
 const config = useRuntimeConfig();
 
 const apiKey = config.SENDGRID_API_KEY;

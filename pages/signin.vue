@@ -80,10 +80,15 @@ async function signup(event: FormSubmitEvent<Schema>) {
         />
       </UForm>
       <UDivider class="mt-5" />
-      <div class="flex items-center mt-5 justify-end">
+      <div class="flex items-center mt-5 justify-between">
         <div class="text-sm">
           <NuxtLink to="/signup" class="tracking-wide">
             Don't have an account? <span class="text-primary-500">Sign up</span>
+          </NuxtLink>
+        </div>
+        <div class="text-sm">
+          <NuxtLink to="/password-reset" class="tracking-wide text-primary-500">
+            Forgot password?
           </NuxtLink>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { hash } from "@node-rs/argon2";
 import { generateIdFromEntropySize } from "lucia";
 import { prisma } from "../../utils/prisma";
 import { generateEmailVerificationCode } from "../utils/emailVerificationCode";
-import { sendEmailVerificationToken } from "../utils/email-services/sendEmailVerificationToken";
+import { sendEmailVerificationToken } from "../../services/email/transactional/sendEmailVerificationToken";
 
 export default defineEventHandler(async (event) => {
   const formData = await readBody(event);

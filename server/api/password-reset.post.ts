@@ -1,6 +1,6 @@
 import { prisma } from "../../utils/prisma";
 import { createPasswordResetToken } from "../utils/passwordResetToken";
-import { sendPasswordResetToken } from "../utils/email-services/sendPasswordResetToken";
+import { sendPasswordResetToken } from "../../services/email/transactional/sendPasswordResetToken";
 import { User } from "lucia";
 
 export default defineEventHandler(async (event) => {
