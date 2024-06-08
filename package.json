@@ -17,6 +17,7 @@
     "@supabase/supabase-js": "^2.43.4",
     "@types/lodash-es": "^4.17.12",
     "arctic": "^1.9.0",
+    "argon2": "^0.40.3",
     "install": "^0.13.0",
     "lodash-es": "^4.17.21",
     "lucia": "^3.2.0",
