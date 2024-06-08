@@ -58,6 +58,7 @@ export default defineEventHandler(async (event) => {
         family_name: googleUser.family_name,
         picture: googleUser.picture,
         email_verified: googleUser.email_verified,
+        auth_method: "google",
       },
     });
 
@@ -94,4 +95,5 @@ interface GoogleUser {
   family_name: string;
   picture: string;
   email_verified: boolean;
+  auth_method: string;
 }

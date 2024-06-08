@@ -7,8 +7,6 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const { email } = body;
 
-  console.log("EMAIL", email);
-
   const ipAddress =
     event.node.req.headers["x-forwarded-for"] ||
     event.node.req.connection.remoteAddress ||
@@ -25,6 +23,11 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  // Only send password reset email if the user is using email/password auth
+  if (user.auth_method !== "email") {
+    return;
+  }
+
   const verificationToken = await createPasswordResetToken(
     user.id,
     ipAddress.toString()
@@ -33,6 +36,7 @@ export default defineEventHandler(async (event) => {
     "http://localhost:3000/reset-password/" + verificationToken;
 
   await sendPasswordResetToken(email, verificationLink, user as User);
+
   return new Response(null, {
     status: 200,
   });

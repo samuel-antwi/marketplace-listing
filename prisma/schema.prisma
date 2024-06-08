@@ -22,6 +22,7 @@ model user {
   email    String?    @unique
   mobile   String?
   email_verified Boolean @default(false)
+  auth_method String?
   name String?
   given_name String?
   family_name String?

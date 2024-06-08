@@ -18,7 +18,7 @@ const sendResetEmail = async () => {
     toast.add({
       title: "Success",
       description:
-        " A password reset link has been sent to your email address. Please check your inbox.",
+        " If the provided email address is associated with an account, a password reset link has been sent. Please check your inbox.",
       color: "green",
       timeout: 0,
     });

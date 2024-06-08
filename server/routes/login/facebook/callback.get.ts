@@ -51,6 +51,7 @@ export default defineEventHandler(async (event) => {
         family_name: facebookUser.last_name,
         picture: facebookUser.picture,
         email_verified: facebookUser.email_verified,
+        auth_method: "facebook",
       },
     });
 
@@ -86,4 +87,5 @@ interface FacebookUser {
   last_name: string;
   picture: string;
   email_verified: boolean;
+  auth_method: string;
 }

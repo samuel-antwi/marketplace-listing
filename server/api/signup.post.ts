@@ -72,6 +72,7 @@ export default defineEventHandler(async (event) => {
       family_name: lastName.toString(),
       name: `${firstName} ${lastName}`,
       password_hash: passwordHash,
+      auth_method: "email",
     },
   });
 
