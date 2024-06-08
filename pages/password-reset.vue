@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useUser } from "~/composables/Auth/auth";
 
 const email = ref("");
 const isSubmitting = ref(false);
 const toast = useToast();
+
+const user = useUser();
 
 const sendResetEmail = async () => {
   try {
@@ -29,6 +32,15 @@ const sendResetEmail = async () => {
     isSubmitting.value = false;
   }
 };
+watch(
+  user,
+  () => {
+    if (user?.value) {
+      return navigateTo("/");
+    }
+  },
+  { immediate: true }
+);
 </script>
 <template>
   <div class="flex items-center justify-center min-h-screen bg-gray-100">

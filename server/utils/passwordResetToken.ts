@@ -3,25 +3,12 @@ import { sha256 } from "oslo/crypto";
 import { encodeHex } from "oslo/encoding";
 import { generateIdFromEntropySize } from "lucia";
 import { prisma } from "../../utils/prisma";
+import { User } from "lucia";
 
 export async function createPasswordResetToken(
-  userId: string,
+  user: User,
   ipAddress: string
 ): Promise<string> {
-  const existingRecord = await prisma.password_reset_token.findUnique({
-    where: {
-      id: userId,
-    },
-  });
-
-  if (existingRecord) {
-    await prisma.password_reset_token.delete({
-      where: {
-        id: userId,
-      },
-    });
-  }
-
   const tokenId = generateIdFromEntropySize(25);
   const tokenHash = encodeHex(await sha256(new TextEncoder().encode(tokenId)));
   const id = generateIdFromEntropySize(10);
@@ -29,7 +16,7 @@ export async function createPasswordResetToken(
     data: {
       id: id,
       token_hash: tokenHash,
-      userId: userId,
+      userId: user.id,
       expiresAt: createDate(new TimeSpan(12, "h")),
       createdAt: new Date(),
       ipAddress: ipAddress,

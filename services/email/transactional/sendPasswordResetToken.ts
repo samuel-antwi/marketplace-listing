@@ -26,7 +26,7 @@ If you did not request a password reset, please ignore this email or contact our
 
 For security reasons, this link will expire in 24 hours.
 
-If you have any questions or need assistance, feel free to contact our support team at [support email or phone number].
+If you have any questions or need assistance, feel free to contact our support team at support@onegii.com.
 
 Thank you for choosing Onegii. We are here to help!
 
@@ -42,7 +42,7 @@ Best regards,
 <p><a href="${resetLink}">Reset Password</a></p>
 <p>If you did not request a password reset, please ignore this email or contact our support team if you have any concerns.</p>
 <p>For security reasons, this link will expire in 24 hours.</p>
-<p>If you have any questions or need assistance, feel free to contact our support team at <strong>[support email or phone number]</strong>.</p>
+<p>If you have any questions or need assistance, feel free to contact our support team at <strong>support@onegii.com</strong>.</p>
 <p>Thank you for choosing <strong>Onegii</strong>. We are here to help!</p>
 <br>
 <p>Best regards,</p>

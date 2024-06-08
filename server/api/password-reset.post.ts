@@ -9,14 +9,28 @@ export default defineEventHandler(async (event) => {
 
   const ipAddress =
     event.node.req.headers["x-forwarded-for"] ||
-    event.node.req.connection.remoteAddress ||
+    event.node.req.socket.remoteAddress ||
     "";
 
   const user = await prisma.user.findFirst({
     where: {
       email: email,
     },
+    // return password_rset_token relation
+    include: {
+      password_reset_token: true,
+    },
   });
+
+  if (user?.password_reset_token.length) {
+    // Delete existing password reset tokens for the user
+    await prisma.password_reset_token.deleteMany({
+      where: {
+        userId: user.id,
+      },
+    });
+  }
+
   if (!user || !user.email_verified) {
     return new Response("Invalid email", {
       status: 400,
@@ -29,11 +43,15 @@ export default defineEventHandler(async (event) => {
   }
 
   const verificationToken = await createPasswordResetToken(
-    user.id,
+    user as User,
     ipAddress.toString()
   );
+  const prodUrl = "https://marketplace-listing.vercel.app/reset-password";
+  const devUrl = "http://localhost:3000/reset-password";
   const verificationLink =
-    "http://localhost:3000/reset-password/" + verificationToken;
+    process.env.NODE_ENV === "production"
+      ? `${prodUrl}/${verificationToken}`
+      : `${devUrl}/${verificationToken}`;
 
   await sendPasswordResetToken(email, verificationLink, user as User);
 

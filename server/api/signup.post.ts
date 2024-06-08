@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const formData = await readBody(event);
   const ipAddress =
     event.node.req.headers["x-forwarded-for"] ||
-    event.node.req.connection.remoteAddress ||
+    event.node.req.socket.remoteAddress ||
     "";
   const {
     email,

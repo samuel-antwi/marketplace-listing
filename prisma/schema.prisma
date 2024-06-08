@@ -34,7 +34,7 @@ model user {
 model email_verification_code{
   id String @id 
   userId String
-  user user @relation(fields: [userId], references: [id])
+  user user @relation(fields: [userId], references: [id], onDelete: Cascade)
   email String
   code String
   expiresAt DateTime
@@ -48,7 +48,7 @@ model password_reset_token{
   id String @id
   token_hash String @unique
   userId String
-  user user @relation(fields: [userId], references: [id])
+  user user @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt DateTime
   ipAddress String
   createdAt DateTime @default(now())

@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
   const user = event.context.user;
   const ipAddress =
     event.node.req.headers["x-forwarded-for"] ||
-    event.node.req.connection.remoteAddress ||
+    event.node.req.socket.remoteAddress ||
     "";
 
   if (!user) {
