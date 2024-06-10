@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { loginSchema } from "@/lib/schema";
+import { signinSchema } from "@/lib/schema";
 import { z } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
 
@@ -12,27 +12,40 @@ const userDetails = ref({
   password: "",
 });
 const isSubmiting = ref(false);
+const errorMessage = ref<string | null>(null);
 
-type Schema = z.output<typeof loginSchema>;
+type Schema = z.output<typeof signinSchema>;
 
-async function signup(event: FormSubmitEvent<Schema>) {
+async function signin(event: FormSubmitEvent<Schema>) {
   isSubmiting.value = true;
+  errorMessage.value = null; // Reset error message before submitting
+  const router = useRouter();
+
   try {
     await $fetch("/api/login", {
       method: "POST",
       body: userDetails.value,
     });
-    await navigateTo("/");
-    isSubmiting.value = false;
+    await router.push("/");
   } catch (e) {
-    console.error(e);
+    if (
+      (e as any).response &&
+      (e as any).response._data &&
+      (e as any).response._data.message
+    ) {
+      errorMessage.value = (e as any).response._data.message;
+    } else {
+      errorMessage.value = "An unexpected error occurred. Please try again.";
+    }
+  } finally {
+    isSubmiting.value = false;
   }
 }
 </script>
 
 <template>
   <div
-    class="shadow-md w-full border bg-white rounded-xl flex flex-col justify-center p-5 md:p-8"
+    class="shadow-md w-full relative border bg-white rounded-xl flex flex-col justify-center p-5 md:p-8"
   >
     <div>
       <div class="mb-7 text-center">
@@ -41,10 +54,17 @@ async function signup(event: FormSubmitEvent<Schema>) {
           Welcome! Please sign in to your account.
         </p>
       </div>
+      <div
+        class="bg-[#f1d0d0d0] relative rounded mb-6 p-4 border border-[#e5a5af] text-[#ad2e2c] w-full text-left"
+        v-if="errorMessage"
+      >
+        <UIcon name="i-mdi-alert-circle" class="absolute left-2" />
+        <p class="text-sm ml-3">{{ errorMessage }}</p>
+      </div>
       <div>
         <auth-social-login />
       </div>
-      <UForm :schema="loginSchema" :state="userDetails" @submit="signup">
+      <UForm :schema="signinSchema" :state="userDetails" @submit="signin">
         <div class="mb-5">
           <UFormGroup label="Email" name="email">
             <UInput
@@ -70,8 +90,9 @@ async function signup(event: FormSubmitEvent<Schema>) {
           </UFormGroup>
         </div>
         <UButton
-          :disabled="isSubmiting"
           :loading="isSubmiting"
+          trailing
+          loading-icon="i-mdi-loading"
           block
           label="Continue"
           type="submit"

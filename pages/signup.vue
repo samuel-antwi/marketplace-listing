@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { authSchema } from "@/lib/schema";
+import { signupSchema } from "@/lib/schema";
 import { z } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
 
@@ -13,34 +13,34 @@ const userDetails = ref({
   given_name: "",
   family_name: "",
 });
-const isSubmitting = ref(false);
-const errorMsg = ref("");
-const toast = useToast();
+const isSubmiting = ref(false);
+const errorMessage = ref<string | null>(null);
 
-type Schema = z.output<typeof authSchema>;
+type Schema = z.output<typeof signupSchema>;
 
 async function signup(event: FormSubmitEvent<Schema>) {
-  isSubmitting.value = true;
-  errorMsg.value = "";
-
+  isSubmiting.value = true;
+  errorMessage.value = null;
   try {
     await $fetch("/api/signup", {
       method: "POST",
       body: userDetails.value,
     });
-    isSubmitting.value = false;
+    isSubmiting.value = false;
     await navigateTo("/verify-email");
-  } catch (e: any) {
-    isSubmitting.value = false;
-    if (e.data?.message) {
-      if (e.data.statusCode === 400) {
-        errorMsg.value = e.data.message;
-      } else {
-        toast.add({ title: e.data.message, timeout: 0 });
-      }
+  } catch (e) {
+    if (
+      (e as any).response &&
+      (e as any).response._data &&
+      (e as any).response._data.message
+    ) {
+      errorMessage.value = (e as any).response._data.message;
+      userDetails.value.password = "";
     } else {
-      errorMsg.value = "An unexpected error occurred. Please try again.";
+      errorMessage.value = "An unexpected error occurred. Please try again.";
     }
+  } finally {
+    isSubmiting.value = false;
   }
 }
 </script>
@@ -56,10 +56,17 @@ async function signup(event: FormSubmitEvent<Schema>) {
           Welcome! Please fill in the details to get started.
         </p>
       </div>
+      <div
+        class="bg-[#f1d0d0d0] relative rounded mb-6 p-4 border border-[#e5a5af] text-[#ad2e2c] w-full text-left"
+        v-if="errorMessage"
+      >
+        <UIcon name="i-mdi-alert-circle" class="absolute left-2" />
+        <p class="text-sm ml-3">{{ errorMessage }}</p>
+      </div>
       <div>
         <auth-social-login />
       </div>
-      <UForm :schema="authSchema" :state="userDetails" @submit="signup">
+      <UForm :schema="signupSchema" :state="userDetails" @submit="signup">
         <div class="flex space-x-4 mb-5">
           <div>
             <UFormGroup label="First name" name="given_name">
@@ -92,10 +99,6 @@ async function signup(event: FormSubmitEvent<Schema>) {
               size="lg"
             />
           </UFormGroup>
-          <div v-if="errorMsg" class="text-sm flex items-center text-red-500">
-            <UIcon name="i-mdi-alert-circle" class="mr-1" />
-            {{ errorMsg }}
-          </div>
         </div>
         <div>
           <UFormGroup label="Password" name="password">
@@ -111,10 +114,11 @@ async function signup(event: FormSubmitEvent<Schema>) {
           </UFormGroup>
         </div>
         <UButton
-          :disabled="isSubmitting"
-          :loading="isSubmitting"
+          loading-icon="i-mdi-loading"
+          :loading="isSubmiting"
+          trailing
           block
-          label="Continue"
+          label="Sign up"
           type="submit"
           class="mt-5 w-full"
           size="lg"

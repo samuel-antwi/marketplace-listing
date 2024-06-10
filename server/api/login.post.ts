@@ -1,4 +1,3 @@
-// server/api/login.post.ts
 import { verify } from "@node-rs/argon2";
 import { prisma } from "../../utils/prisma";
 
@@ -27,14 +26,16 @@ export default eventHandler(async (event) => {
     // it is crucial your implementation is protected against brute-force attacks with login throttling etc.
     // If usernames are public, you may outright tell the user that the username is invalid.
     throw createError({
-      message: "Incorrect email or password",
+      message:
+        "The log in details provided do not math our records, please try again. After 5 incorrect attempts we will lock your account and send you an email advising you what to do next.",
       statusCode: 400,
     });
   }
 
   if (existingUser.password_hash === null) {
     throw createError({
-      message: "Incorrect email or password",
+      message:
+        "The log in details provided do not math our records, please try again. After 5 incorrect attempts we will lock your account and send you an email advising you what to do next.",
       statusCode: 400,
     });
   }
@@ -47,7 +48,8 @@ export default eventHandler(async (event) => {
   });
   if (!validPassword) {
     throw createError({
-      message: "Incorrect email or password",
+      message:
+        "The log in details provided do not math our records, please try again. After 5 incorrect attempts we will lock your account and send you an email advising you what to do next.",
       statusCode: 400,
     });
   }

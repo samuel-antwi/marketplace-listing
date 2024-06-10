@@ -4,7 +4,7 @@ import ExpiredEmailLink from "@/components/Auth/ExpiredEmailLink.vue";
 
 const newPassword = ref("");
 const confirmPassword = ref("");
-const isSubmitting = ref(false);
+const isSubmiting = ref(false);
 const route = useRoute();
 const isValidToken = ref<boolean | null>(null);
 const errorMessage = ref<string>("");
@@ -20,7 +20,7 @@ const resetPassword = async () => {
     });
   }
   try {
-    isSubmitting.value = true;
+    isSubmiting.value = true;
     await $fetch(`/api/reset-password/${route.params.token as string}`, {
       method: "POST",
       headers: {
@@ -32,7 +32,7 @@ const resetPassword = async () => {
   } catch (error) {
     console.error("Failed to reset password:", error);
   } finally {
-    isSubmitting.value = false;
+    isSubmiting.value = false;
   }
 };
 
@@ -82,7 +82,7 @@ onMounted(async () => {
             size="lg"
           />
           <UButton
-            :loading="isSubmitting"
+            :loading="isSubmiting"
             trailing
             loading-icon="i-mdi-loading"
             block

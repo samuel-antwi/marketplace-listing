@@ -3,14 +3,14 @@ import { ref } from "vue";
 import { useUser } from "~/composables/Auth/auth";
 
 const email = ref("");
-const isSubmitting = ref(false);
+const isSubmiting = ref(false);
 const toast = useToast();
 
 const user = useUser();
 
 const sendResetEmail = async () => {
   try {
-    isSubmitting.value = true;
+    isSubmiting.value = true;
     await $fetch("/api/password-reset", {
       method: "POST",
       headers: {
@@ -26,10 +26,10 @@ const sendResetEmail = async () => {
       timeout: 0,
     });
     email.value = "";
-    isSubmitting.value = false;
+    isSubmiting.value = false;
   } catch (error) {
     console.error("Failed to send reset email:", error);
-    isSubmitting.value = false;
+    isSubmiting.value = false;
   }
 };
 watch(
@@ -60,7 +60,7 @@ watch(
 
         <UButton
           type="submit"
-          :loading="isSubmitting"
+          :loading="isSubmiting"
           loading-icon="i-mdi-loading"
           size="lg"
           block
