@@ -3,6 +3,7 @@ import { useUser } from "~/composables/Auth/auth";
 const verificationCode = ref("");
 const toast = useToast();
 const isLoading = ref(false);
+const errorMessage = ref<string | null>(null);
 
 const verifyCode = async () => {
   isLoading.value = true;
@@ -16,8 +17,17 @@ const verifyCode = async () => {
     });
     await navigateTo("/");
     isLoading.value = false;
-  } catch (error) {
-    console.error("Failed to verify code:", error);
+  } catch (e) {
+    if (
+      (e as any).response &&
+      (e as any).response._data &&
+      (e as any).response._data.message
+    ) {
+      errorMessage.value = (e as any).response._data.message;
+    } else {
+      errorMessage.value = "An unexpected error occurred. Please try again.";
+    }
+  } finally {
     isLoading.value = false;
   }
 };

@@ -13,3 +13,9 @@ export const signinSchema = z.object({
   email: z.string().email("Oops! Enter a valid email address!"),
   password: z.string().min(1, "Please enter your password!"),
 });
+
+export const resetPasswordSchema = z.object({
+  password: z
+    .string()
+    .min(8, "Your password must contain 8 or more characters."),
+});

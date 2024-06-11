@@ -16,11 +16,18 @@ export default defineEventHandler(async (event) => {
     where: {
       email: email,
     },
-    // return password_rset_token relation
     include: {
       password_reset_token: true,
     },
   });
+
+  // if (user?.account_locked) {
+  //   throw createError({
+  //     message:
+  //       "Your account has been locked due to too many failed login attempts. Please reset your password to unlock your account.",
+  //     statusCode: 400,
+  //   });
+  // }
 
   if (user?.password_reset_token.length) {
     // Delete existing password reset tokens for the user
@@ -32,8 +39,9 @@ export default defineEventHandler(async (event) => {
   }
 
   if (!user || !user.email_verified) {
-    return new Response("Invalid email", {
-      status: 400,
+    throw createError({
+      message: "User not found or email is not verified",
+      statusCode: 400,
     });
   }
 

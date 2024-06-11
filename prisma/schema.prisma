@@ -29,6 +29,8 @@ model user {
   picture String?
   email_verification_token email_verification_code[]
   password_reset_token password_reset_token[]
+  failed_attempts Int       @default(0)
+  account_locked  Boolean   @default(false)
 }
 
 model email_verification_code{

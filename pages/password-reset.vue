@@ -5,10 +5,12 @@ import { useUser } from "~/composables/Auth/auth";
 const email = ref("");
 const isSubmiting = ref(false);
 const toast = useToast();
+const errorMessage = ref<string | null>(null);
 
 const user = useUser();
 
 const sendResetEmail = async () => {
+  errorMessage.value = null;
   try {
     isSubmiting.value = true;
     await $fetch("/api/password-reset", {
@@ -27,8 +29,17 @@ const sendResetEmail = async () => {
     });
     email.value = "";
     isSubmiting.value = false;
-  } catch (error) {
-    console.error("Failed to send reset email:", error);
+  } catch (e) {
+    if (
+      (e as any).response &&
+      (e as any).response._data &&
+      (e as any).response._data.message
+    ) {
+      errorMessage.value = (e as any).response._data.message;
+    } else {
+      errorMessage.value = "An unexpected error occurred. Please try again.";
+    }
+  } finally {
     isSubmiting.value = false;
   }
 };
@@ -49,6 +60,13 @@ watch(
       <p class="mb-4 text-gray-600 text-center">
         Enter your email address to receive a password reset link.
       </p>
+      <div
+        class="bg-[#f1d0d0d0] relative rounded mb-6 p-4 border border-[#e5a5af] text-[#ad2e2c] w-full text-left"
+        v-if="errorMessage"
+      >
+        <UIcon name="i-mdi-alert-circle" class="absolute left-2" />
+        <p class="text-sm ml-3">{{ errorMessage }}</p>
+      </div>
       <form @submit.prevent="sendResetEmail" class="space-y-4">
         <UInput
           size="lg"

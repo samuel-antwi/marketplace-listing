@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import ExpiredEmailLink from "@/components/Auth/ExpiredEmailLink.vue";
+import { resetPasswordSchema } from "~/lib/schema";
+import { z } from "zod";
+import type { FormSubmitEvent } from "#ui/types";
 
-const newPassword = ref("");
-const confirmPassword = ref("");
+const formDetails = ref({
+  password: "",
+  confirmPassword: "",
+});
 const isSubmiting = ref(false);
 const route = useRoute();
 const isValidToken = ref<boolean | null>(null);
@@ -11,8 +16,10 @@ const errorMessage = ref<string>("");
 
 const toast = useToast();
 
-const resetPassword = async () => {
-  if (newPassword.value !== confirmPassword.value) {
+type Schema = z.output<typeof resetPasswordSchema>;
+
+const resetPassword = async (event: FormSubmitEvent<Schema>) => {
+  if (formDetails.value.password !== formDetails.value.confirmPassword) {
     toast.add({
       title: "Passwords do not match",
       description: "Please make sure the passwords match",
@@ -26,7 +33,7 @@ const resetPassword = async () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ password: newPassword.value }),
+      body: JSON.stringify({ password: formDetails.value.password }),
     });
     await navigateTo("/");
   } catch (error) {
@@ -66,18 +73,23 @@ onMounted(async () => {
     >
       <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 class="text-2xl font-bold mb-4 text-center">Reset Your Password</h1>
-        <form @submit.prevent="resetPassword" class="space-y-4">
+        <UForm
+          :schema="resetPasswordSchema"
+          :state="formDetails"
+          @submit.prevent="resetPassword"
+          class="space-y-4"
+        >
           <UInput
             required
             type="password"
-            v-model="newPassword"
+            v-model="formDetails.password"
             placeholder="New Password"
             size="lg"
           />
           <UInput
             required
             type="password"
-            v-model="confirmPassword"
+            v-model="formDetails.confirmPassword"
             placeholder="Confirm New Password"
             size="lg"
           />
@@ -91,7 +103,7 @@ onMounted(async () => {
           >
             Submit
           </UButton>
-        </form>
+        </UForm>
       </div>
     </div>
   </div>
