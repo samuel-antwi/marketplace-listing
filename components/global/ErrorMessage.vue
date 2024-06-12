@@ -1,17 +1,12 @@
 <script setup lang="ts">
-defineProps(["errorMsg"]);
+defineProps(["errorMessage"]);
 </script>
 
 <template>
   <div
-    v-if="errorMsg"
-    class="flex items-center p-8 mb-4 text-gray-700 bg-[#FAE7EC]"
+    class="bg-[#f1d0d0d0] relative rounded mb-6 p-4 border border-[#e5a5af] text-[#ad2e2c] w-full text-left"
   >
-    <ExclamationCircleIcon class="w-6 h-6 mr-2 text-gray-900" />
-    <UIcon
-      class="w-6 h-6 mr-2 text-red-500"
-      name="i-mdi-exclamation-triangle"
-    />
-    <p>{{ errorMsg }}</p>
+    <UIcon name="i-mdi-alert-circle" class="absolute left-2 mt-[2px]" />
+    <p class="text-sm ml-3">{{ errorMessage }}</p>
   </div>
 </template>

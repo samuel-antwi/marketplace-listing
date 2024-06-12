@@ -11,7 +11,7 @@
         button below to request a new link.
       </p>
       <UButton
-        @click="$router.push('/password-reset')"
+        @click="$router.push('/forgot-password')"
         block
         size="lg"
         label="Request a New Reset Link"

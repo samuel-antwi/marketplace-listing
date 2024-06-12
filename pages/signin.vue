@@ -108,7 +108,10 @@ async function signin(event: FormSubmitEvent<Schema>) {
           </NuxtLink>
         </div>
         <div class="text-sm">
-          <NuxtLink to="/password-reset" class="tracking-wide text-primary-500">
+          <NuxtLink
+            to="/forgot-password"
+            class="tracking-wide text-primary-500"
+          >
             Forgot password?
           </NuxtLink>
         </div>

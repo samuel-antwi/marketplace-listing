@@ -18,4 +18,5 @@ export const resetPasswordSchema = z.object({
   password: z
     .string()
     .min(8, "Your password must contain 8 or more characters."),
+  confirmPassword: z.string().min(1, "Please confirm your password!"),
 });

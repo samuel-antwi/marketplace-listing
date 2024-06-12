@@ -4,6 +4,7 @@ import ExpiredEmailLink from "@/components/Auth/ExpiredEmailLink.vue";
 import { resetPasswordSchema } from "~/lib/schema";
 import { z } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
+import ErrorMessage from "~/components/global/ErrorMessage.vue";
 
 const formDetails = ref({
   password: "",
@@ -12,32 +13,35 @@ const formDetails = ref({
 const isSubmiting = ref(false);
 const route = useRoute();
 const isValidToken = ref<boolean | null>(null);
-const errorMessage = ref<string>("");
-
-const toast = useToast();
+const errorMessage = ref<string | null>(null);
 
 type Schema = z.output<typeof resetPasswordSchema>;
 
 const resetPassword = async (event: FormSubmitEvent<Schema>) => {
-  if (formDetails.value.password !== formDetails.value.confirmPassword) {
-    toast.add({
-      title: "Passwords do not match",
-      description: "Please make sure the passwords match",
-      color: "red",
-    });
-  }
   try {
     isSubmiting.value = true;
+    errorMessage.value = null;
     await $fetch(`/api/reset-password/${route.params.token as string}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ password: formDetails.value.password }),
+      body: JSON.stringify({
+        password: formDetails.value.password,
+        confirmPassword: formDetails.value.confirmPassword,
+      }),
     });
     await navigateTo("/");
-  } catch (error) {
-    console.error("Failed to reset password:", error);
+  } catch (e) {
+    if (
+      (e as any).response &&
+      (e as any).response._data &&
+      (e as any).response._data.message
+    ) {
+      errorMessage.value = (e as any).response._data.message;
+    } else {
+      errorMessage.value = "An unexpected error occurred. Please try again.";
+    }
   } finally {
     isSubmiting.value = false;
   }
@@ -46,7 +50,7 @@ const resetPassword = async (event: FormSubmitEvent<Schema>) => {
 onMounted(async () => {
   try {
     const response = await fetch(
-      `/api/verify-password-reset-link/${route.params.token as string}`
+      `/api/verify-forgot-password-link/${route.params.token as string}`
     );
     if (response.ok) {
       isValidToken.value = true;
@@ -73,26 +77,31 @@ onMounted(async () => {
     >
       <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 class="text-2xl font-bold mb-4 text-center">Reset Your Password</h1>
+        <error-message v-if="errorMessage" :errorMessage="errorMessage" />
         <UForm
           :schema="resetPasswordSchema"
           :state="formDetails"
-          @submit.prevent="resetPassword"
+          @submit="resetPassword"
           class="space-y-4"
         >
-          <UInput
-            required
-            type="password"
-            v-model="formDetails.password"
-            placeholder="New Password"
-            size="lg"
-          />
-          <UInput
-            required
-            type="password"
-            v-model="formDetails.confirmPassword"
-            placeholder="Confirm New Password"
-            size="lg"
-          />
+          <UFormGroup label="Password" name="password">
+            <UInput
+              type="password"
+              v-model="formDetails.password"
+              placeholder="New Password"
+              size="lg"
+              name="password"
+            />
+          </UFormGroup>
+          <UFormGroup label="Confirm Password" name="confirm-password">
+            <UInput
+              type="password"
+              v-model="formDetails.confirmPassword"
+              placeholder="Confirm Password"
+              size="lg"
+              name="confirm-password"
+            />
+          </UFormGroup>
           <UButton
             :loading="isSubmiting"
             trailing

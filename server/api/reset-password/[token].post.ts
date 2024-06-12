@@ -8,11 +8,19 @@ import { sendPasswordChangedNotification } from "../../../services/email/transac
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const { password } = body;
+  const { password, confirmPassword } = body;
 
   if (typeof password !== "string" || password.length < 8) {
-    return new Response(null, {
-      status: 400,
+    return createError({
+      message: "Your password must contain 8 or more characters.",
+      statusCode: 400,
+    });
+  }
+
+  if (password !== confirmPassword) {
+    return createError({
+      message: "Passwords do not match",
+      statusCode: 400,
     });
   }
 

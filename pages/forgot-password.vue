@@ -13,7 +13,7 @@ const sendResetEmail = async () => {
   errorMessage.value = null;
   try {
     isSubmiting.value = true;
-    await $fetch("/api/password-reset", {
+    await $fetch("/api/forgot-password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
