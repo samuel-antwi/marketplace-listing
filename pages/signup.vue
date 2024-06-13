@@ -2,6 +2,7 @@
 import { signupSchema } from "@/lib/schema";
 import { z } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
+import ErrorMessage from "~/components/global/ErrorMessage.vue";
 
 definePageMeta({
   layout: "auth",
@@ -50,19 +51,13 @@ async function signup(event: FormSubmitEvent<Schema>) {
     class="shadow-md bg-white w-full border rounded-xl flex flex-col justify-center items-center p-5 md:p-8"
   >
     <div>
-      <div class="mb-7 text-center">
+      <div class="mb-7">
         <h1 class="font-semibold text-xl mb-2">Create your account</h1>
         <p class="text-gray-600 text-sm">
           Welcome! Please fill in the details to get started.
         </p>
       </div>
-      <div
-        class="bg-[#f1d0d0d0] relative rounded mb-6 p-4 border border-[#e5a5af] text-[#ad2e2c] w-full text-left"
-        v-if="errorMessage"
-      >
-        <UIcon name="i-mdi-alert-circle" class="absolute left-2" />
-        <p class="text-sm ml-3">{{ errorMessage }}</p>
-      </div>
+      <error-message v-if="errorMessage" :errorMessage="errorMessage" />
       <div>
         <auth-social-login />
       </div>

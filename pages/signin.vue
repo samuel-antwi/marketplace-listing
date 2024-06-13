@@ -49,7 +49,7 @@ async function signin(event: FormSubmitEvent<Schema>) {
     class="shadow-md w-full relative border bg-white rounded-xl flex flex-col justify-center p-5 md:p-8"
   >
     <div>
-      <div class="mb-7 text-center">
+      <div class="mb-7">
         <h1 class="font-semibold text-xl mb-2">Sign in to Onegii</h1>
         <p class="text-gray-600 text-sm">
           Welcome! Please sign in to your account.
