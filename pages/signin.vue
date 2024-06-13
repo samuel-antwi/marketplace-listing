@@ -2,6 +2,7 @@
 import { signinSchema } from "@/lib/schema";
 import { z } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
+import ErrorMessage from "~/components/global/ErrorMessage.vue";
 
 definePageMeta({
   layout: "auth",
@@ -54,13 +55,7 @@ async function signin(event: FormSubmitEvent<Schema>) {
           Welcome! Please sign in to your account.
         </p>
       </div>
-      <div
-        class="bg-[#f1d0d0d0] relative rounded mb-6 p-4 border border-[#e5a5af] text-[#ad2e2c] w-full text-left"
-        v-if="errorMessage"
-      >
-        <UIcon name="i-mdi-alert-circle" class="absolute left-2" />
-        <p class="text-sm ml-3">{{ errorMessage }}</p>
-      </div>
+      <error-message v-if="errorMessage" :errorMessage="errorMessage" />
       <div>
         <auth-social-login />
       </div>

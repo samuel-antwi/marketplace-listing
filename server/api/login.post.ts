@@ -29,7 +29,7 @@ export default eventHandler(async (event) => {
     await handleFailedAttempt(email);
     throw createError({
       message:
-        "The log in details provided do not match our records, please try again. After 5 incorrect attempts we will lock your account and send you an email advising you what to do next.",
+        "Sorry, we have been unable to sign you in.\nPlease check your sign in details are correct and try again.",
       statusCode: 400,
     });
   }
@@ -46,7 +46,7 @@ export default eventHandler(async (event) => {
     await handleFailedAttempt(email);
     throw createError({
       message:
-        "The log in details provided do not match our records, please try again. After 5 incorrect attempts we will lock your account and send you an email advising you what to do next.",
+        "Sorry, we have been unable to sign you in.\nPlease check your sign in details are correct and try again.",
       statusCode: 400,
     });
   }
@@ -62,7 +62,7 @@ export default eventHandler(async (event) => {
     await handleFailedAttempt(email);
     throw createError({
       message:
-        "The log in details provided do not match our records, please try again. After 5 incorrect attempts we will lock your account and send you an email advising you what to do next.",
+        "Sorry, we have been unable to sign you in.\nPlease check your sign in details are correct and try again.",
       statusCode: 400,
     });
   }
