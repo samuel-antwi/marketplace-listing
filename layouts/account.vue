@@ -4,9 +4,9 @@ import Sidenav from "../components/Account/Sidenav.vue";
 
 <template>
   <UContainer class="md:mt-20 mt-12">
-    <div class="grid grid-cols-12 gap-10">
-      <sidenav class="col-span-3" />
-      <div class="col-span-9 bg-white p-5">
+    <div class="lg:grid grid-cols-12 gap-10">
+      <sidenav class="col-span-3 hidden lg:block" />
+      <div class="col-span-9 bg-white p-5 rounded-lg">
         <slot></slot>
       </div>
     </div>

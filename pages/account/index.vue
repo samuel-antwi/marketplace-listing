@@ -18,7 +18,7 @@ const accountRoutes = [
   {
     name: "My Ads",
     description: "View and manage all your ads in one place",
-    icon: "i-mdi-folder-multiple",
+    icon: "i-mdi-folder",
     to: "/account/my-ads",
   },
   {
@@ -53,9 +53,11 @@ watch(
 </script>
 
 <template>
-  <div class="mt-10 max-w-4xl mx-auto">
+  <div class="mt-10 max-w-4xl px-4 mx-auto">
     <h1 class="mb-5">Your Account</h1>
-    <div class="md:grid lg:grid-cols-3 grid-cols-2 gap-5">
+    <div
+      class="md:grid lg:grid-cols-3 flex gap-3 flex-col md:space-y-0 grid-cols-2 md:gap-5"
+    >
       <NuxtLink
         :to="to"
         class="col-span-1"
@@ -67,7 +69,7 @@ watch(
         >
           <div class="grid grid-cols-3">
             <div
-              class="w-12 col-span-1 h-12 flex items-center justify-center rounded-full bg-primary-500"
+              class="w-12 col-span-1 h-12 flex items-center justify-center rounded-full bg-primary-400"
             >
               <UIcon :name="icon" class="text-4xl text-gray-100" />
             </div>

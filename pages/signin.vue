@@ -19,7 +19,7 @@ type Schema = z.output<typeof signinSchema>;
 
 async function signin(event: FormSubmitEvent<Schema>) {
   isSubmiting.value = true;
-  errorMessage.value = null; // Reset error message before submitting
+  errorMessage.value = null;
   const router = useRouter();
 
   try {
@@ -83,6 +83,12 @@ async function signin(event: FormSubmitEvent<Schema>) {
               autocomplete="new-password"
             />
           </UFormGroup>
+          <NuxtLink
+            to="/forgot-password"
+            class="tracking-wide text-sm text-primary-500"
+          >
+            Forgot password?
+          </NuxtLink>
         </div>
         <UButton
           :loading="isSubmiting"
@@ -91,26 +97,22 @@ async function signin(event: FormSubmitEvent<Schema>) {
           block
           label="Continue"
           type="submit"
-          class="mt-5 w-full"
+          class="mt-8 w-full"
           size="lg"
         />
       </UForm>
       <UDivider class="mt-5" />
-      <div class="flex items-center mt-5 justify-between">
-        <div class="text-sm">
-          <NuxtLink
-            to="/forgot-password"
-            class="tracking-wide text-primary-500"
-          >
-            Forgot password?
-          </NuxtLink>
-        </div>
+      <div class="flex items-center mt-5 justify-end">
         <div class="text-sm">
           <NuxtLink to="/signup" class="tracking-wide">
             Don't have an account? <span class="text-primary-500">Sign up</span>
           </NuxtLink>
         </div>
       </div>
+      <p class="mt-5 text-sm">
+        By creating an account you agree to our Terms and Conditions. Please
+        read our Privacy Policy and Cookie Policy.
+      </p>
     </div>
   </div>
 </template>

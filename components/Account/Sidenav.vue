@@ -6,7 +6,7 @@ const accountRoutes = [
     title: "My Details",
     description:
       "View and edit all your details to keep your account up to date",
-    icon: "i-mdi-user-circle-outline",
+    icon: "i-mdi-user-outline",
     to: "/account/my-details",
   },
   {
@@ -53,7 +53,7 @@ async function logout() {
 </script>
 
 <template>
-  <div class="">
+  <div>
     <div class="shadow-md">
       <div
         class="hover:bg-gray-100 bg-white"
@@ -63,15 +63,15 @@ async function logout() {
         <NavLink :to="to" :icon="icon" :title="title" :isActive="true" />
       </div>
     </div>
-    <div class="hover:bg-gray-100 bg-white shadow-md mt-5 py-3 px-4">
+    <div class="hover:bg-gray-100 bg-white shadow-md mt-5 p-4">
       <button
         :disabled="isLoading"
         @click="logout"
-        class="flex items-center"
+        class="flex items-center text-gray-500"
         type="button"
       >
-        <UIcon name="i-mdi-logout" class="text-primary-600 mr-2 text-2xl" />
-        <span class="text-gray-600">Logout</span>
+        <UIcon name="i-mdi-logout" class="mr-2 text-2xl" />
+        <span>Logout</span>
       </button>
     </div>
   </div>
