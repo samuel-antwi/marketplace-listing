@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useUser } from "~/composables/Auth/auth";
+import ErrorMessage from "~/components/global/ErrorMessage.vue";
 
 const email = ref("");
 const isSubmiting = ref(false);
@@ -60,13 +61,7 @@ watch(
       <p class="mb-4 text-gray-600 text-center">
         Enter your email address to receive a password reset link.
       </p>
-      <div
-        class="bg-[#f1d0d0d0] relative rounded mb-6 p-4 border border-[#e5a5af] text-[#ad2e2c] w-full text-left"
-        v-if="errorMessage"
-      >
-        <UIcon name="i-mdi-alert-circle" class="absolute left-2" />
-        <p class="text-sm ml-3">{{ errorMessage }}</p>
-      </div>
+      <ErrorMessage v-if="errorMessage" :errorMessage="errorMessage" />
       <form @submit.prevent="sendResetEmail" class="space-y-4">
         <UInput
           size="lg"

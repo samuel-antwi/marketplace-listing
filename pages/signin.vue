@@ -27,7 +27,7 @@ async function signin(event: FormSubmitEvent<Schema>) {
       method: "POST",
       body: userDetails.value,
     });
-    await router.push("/");
+    await router.push("/account");
   } catch (e) {
     if (
       (e as any).response &&
