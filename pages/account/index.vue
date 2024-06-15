@@ -54,7 +54,7 @@ watch(
 
 <template>
   <div class="mt-10 max-w-4xl px-4 mx-auto">
-    <h1 class="mb-5">Your Account</h1>
+    <h1 class="mb-5 text-3xl">Your Account</h1>
     <div
       class="md:grid lg:grid-cols-3 flex gap-3 flex-col md:space-y-0 grid-cols-2 md:gap-5"
     >
