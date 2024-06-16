@@ -41,7 +41,7 @@ const isLoading = ref(false);
 async function logout() {
   isLoading.value = true;
   try {
-    await $fetch("/api/logout", {
+    await $fetch("/api/auth/logout", {
       method: "POST",
     });
     await navigateTo("/logout");

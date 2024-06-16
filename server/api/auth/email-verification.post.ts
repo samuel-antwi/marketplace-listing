@@ -1,7 +1,7 @@
-import { lucia } from "../utils/auth";
+import { lucia } from "../../utils/auth";
 import { isWithinExpirationDate } from "oslo";
 import type { User } from "lucia";
-import { prisma } from "../../utils/prisma";
+import { prisma } from "../../../utils/prisma";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);

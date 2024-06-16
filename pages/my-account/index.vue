@@ -16,13 +16,13 @@ const isMyAccountPage = computed(() => {
 <template>
   <div class="md:mt-20 mt-12">
     <UContainer>
-      <div class="grid-cols-12 gap-5 md:grid">
+      <div class="grid-cols-12 gap-5 lg:grid">
         <div class="col-span-3 mb-4 lg:mb-0">
-          <Sidenav v-if="isMyAccountPage" class="md:hidden" />
-          <Sidenav class="hidden md:block" />
+          <Sidenav v-if="isMyAccountPage" class="lg:hidden" />
+          <Sidenav class="hidden lg:block" />
         </div>
         <div class="col-span-9 bg-white shadow">
-          <div v-if="isMyAccountPage" class="hidden md:block overview">
+          <div v-if="isMyAccountPage" class="hidden lg:block overview">
             <div>
               <div class="pt-12 pl-12">
                 <h1 class="overview-content">Welcome to</h1>

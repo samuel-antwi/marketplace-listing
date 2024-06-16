@@ -1,5 +1,5 @@
 import { verify } from "@node-rs/argon2";
-import { prisma } from "../../utils/prisma";
+import { prisma } from "../../../utils/prisma";
 
 export default eventHandler(async (event) => {
   const formData = await readBody(event);

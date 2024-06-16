@@ -23,7 +23,7 @@ async function signup(event: FormSubmitEvent<Schema>) {
   isSubmiting.value = true;
   errorMessage.value = null;
   try {
-    await $fetch("/api/signup", {
+    await $fetch("/api/auth/signup", {
       method: "POST",
       body: userDetails.value,
     });

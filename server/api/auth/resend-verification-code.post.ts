@@ -1,6 +1,6 @@
-import { prisma } from "./../../utils/prisma";
-import { generateEmailVerificationCode } from "../utils/emailVerificationCode";
-import { sendEmailVerificationToken } from "../../services/email/transactional/sendEmailVerificationToken";
+import { prisma } from "../../../utils/prisma";
+import { generateEmailVerificationCode } from "../../utils/emailVerificationCode";
+import { sendEmailVerificationToken } from "../../../services/email/transactional/sendEmailVerificationToken";
 
 const RATE_LIMIT_TIME_FRAME = 60 * 1000; // 1 minute
 const MAX_EMAILS_PER_TIME_FRAME = 1;

@@ -23,7 +23,7 @@ async function signin(event: FormSubmitEvent<Schema>) {
   const router = useRouter();
 
   try {
-    await $fetch("/api/login", {
+    await $fetch("/api/auth/login", {
       method: "POST",
       body: userDetails.value,
     });
