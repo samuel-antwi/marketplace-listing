@@ -16,9 +16,9 @@ const { title, description, icon } = toRefs(props);
 
 <template>
   <div>
-    <div class="flex items-center">
-      <UIcon :name="icon" class="mb-3 text-3xl mr-2" />
-      <h1 class="mb-3 text-3xl font-semibold tracking-wide text-gray-700">
+    <div class="flex items-center text-gray-700">
+      <UIcon :name="icon" class="mb-3 text-2xl mr-2" />
+      <h1 class="mb-3 font-semibold">
         {{ title }}
       </h1>
     </div>

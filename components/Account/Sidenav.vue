@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import NavLink from "../global/NavLink.vue";
+import Avatar from "./Avatar.vue";
 
 const accountRoutes = [
   {
@@ -7,31 +8,31 @@ const accountRoutes = [
     description:
       "View and edit all your details to keep your account up to date",
     icon: "i-mdi-user-outline",
-    to: "/account/my-details",
+    to: "/my-account/my-details",
   },
   {
     title: "My Ads",
     description: "View and manage all your ads in one place",
     icon: "i-mdi-folder-outline",
-    to: "/account/my-ads",
+    to: "/my-account/my-ads",
   },
   {
     title: "Your Message",
     description: "View or respond to messages from Sellers and Buyers",
     icon: "i-mdi-email-outline",
-    to: "/account/messages",
+    to: "/my-account/messages",
   },
   {
     title: "Favourites",
     description: "View and manage all your favorites",
     icon: "i-mdi-heart-outline",
-    to: "/account/favourites",
+    to: "/my-account/favourites",
   },
   {
     title: "Change Password",
     description: "Change your password",
     icon: "i-mdi-lock-outline",
-    to: "/account/change-password",
+    to: "/my-account/change-password",
   },
 ];
 
@@ -54,6 +55,7 @@ async function logout() {
 
 <template>
   <div>
+    <avatar />
     <div class="shadow-md">
       <div
         class="hover:bg-gray-100 bg-white"
