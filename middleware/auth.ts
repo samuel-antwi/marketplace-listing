@@ -3,7 +3,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
   const user = useUser();
   const attemptedRoute = useCookie("attemptedRoute");
 
-  const data = await useRequestFetch()("/api/user");
+  const data = await useRequestFetch()("/api/users/user");
   if (data) {
     user.value = data;
   } else {

@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@nuxt/ui", "@vueuse/nuxt", "@formkit/nuxt"],
+  modules: ["@nuxt/ui", "@vueuse/nuxt", "@formkit/nuxt", "@nuxtjs/supabase"],
   devtools: { enabled: true },
   runtimeConfig: {
     DATABASE_URL: process.env.DATABASE_URL,
@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
+    SUPABASE_JWT_SECRET: process.env.SUPABASE_JWT_SECRET,
     public: {
       SUPABASE_URL: process.env.SUPABASE_URL,
       SUPABASE_KEY: process.env.SUPABASE_KEY,
@@ -23,5 +24,8 @@ export default defineNuxtConfig({
   css: ["@/assets/css/main.css"],
   ui: {
     icons: ["mdi"],
+  },
+  supabase: {
+    redirect: false,
   },
 });

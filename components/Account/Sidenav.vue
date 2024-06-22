@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import NavLink from "../global/NavLink.vue";
 import Avatar from "./Avatar.vue";
+import { useUser } from "~/composables/Auth/auth";
+import { useForceRender } from "~/composables/Global/useForceRender";
 
 const accountRoutes = [
   {
@@ -37,6 +39,7 @@ const accountRoutes = [
 ];
 
 const isLoading = ref(false);
+const { componentKey } = useForceRender();
 
 async function logout() {
   isLoading.value = true;

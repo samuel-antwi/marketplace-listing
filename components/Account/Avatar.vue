@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import { useUser } from "~/composables/Auth/auth";
 
+const initials = ref("");
 const user = useUser();
 
-//   Get Initials
-const initials = computed(() => {
-  return user.value?.name
-    .split(" ")
-    .map((n) => n[0])
-    .join("");
-});
+watch(
+  user,
+  () => {
+    if (user?.value?.given_name && user?.value?.family_name) {
+      initials.value = user.value.given_name[0] + user.value.family_name[0];
+    } else {
+      initials.value = "";
+    }
+  },
+  { immediate: true, deep: true }
+);
 </script>
 
 <template>
@@ -23,7 +28,7 @@ const initials = computed(() => {
             class="rounded-full"
             v-if="user?.picture"
             :src="user?.picture"
-            :alt="user?.name"
+            :alt="`${user?.given_name} ${user?.family_name}`"
           />
           <span
             v-else
@@ -34,7 +39,7 @@ const initials = computed(() => {
         <div class="ml-4 lg:ml-2">
           <h2 class="text-gray-700">Hi,</h2>
           <h2 class="text-lg font-medium tracking-wide capitalize">
-            {{ user?.name }}
+            {{ `${user?.given_name} ${user?.family_name}` }}
           </h2>
         </div>
       </div>
