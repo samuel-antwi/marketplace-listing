@@ -4,17 +4,15 @@ import { useUser } from "~/composables/Auth/auth";
 const initials = ref("");
 const user = useUser();
 
-watch(
-  user,
-  () => {
-    if (user?.value?.given_name && user?.value?.family_name) {
-      initials.value = user.value.given_name[0] + user.value.family_name[0];
-    } else {
-      initials.value = "";
-    }
-  },
-  { immediate: true, deep: true }
-);
+const updateInitials = () => {
+  if (user?.value?.given_name && user?.value?.family_name) {
+    initials.value = user.value.given_name[0] + user.value.family_name[0];
+  } else {
+    initials.value = "";
+  }
+};
+
+watch(() => user.value, updateInitials, { immediate: true, deep: true });
 </script>
 
 <template>

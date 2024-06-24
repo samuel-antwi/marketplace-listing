@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const user = await prisma.user.updateMany({
+    const user = await prisma.user.update({
       where: {
         id: id,
       },

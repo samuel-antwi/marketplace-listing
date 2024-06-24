@@ -7,6 +7,7 @@ import { edituserSchema } from "@/lib/schema";
 import { z } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
 import ErrorMessage from "~/components/global/ErrorMessage.vue";
+import { useForceRender } from "~/composables/Global/useForceRender";
 
 definePageMeta({
   layout: "account",
@@ -18,15 +19,18 @@ const isSubmitting = ref(false);
 
 const toast = useToast();
 
-const initialFormInput = {
-  given_name: user.value?.given_name || "",
-  family_name: user.value?.family_name || "",
-  email: user.value?.email || "",
-  mobile: user.value?.mobile || "",
-};
+const {
+  given_name = "",
+  family_name = "",
+  email = "",
+  mobile = "",
+  auth_method = "email",
+} = user.value || {};
+const initialFormInput = { given_name, family_name, email, mobile };
 
 const formInput = ref({ ...initialFormInput });
 const errorMessage = ref<string | null>(null);
+const { forceRerender } = useForceRender();
 
 type Schema = z.output<typeof edituserSchema>;
 
@@ -39,53 +43,55 @@ const isFormChanged = computed(() => {
   );
 });
 
-function getChangedFields() {
-  const changedFields: Partial<typeof initialFormInput> = {};
-  if (formInput.value.given_name !== initialFormInput.given_name) {
-    changedFields.given_name = formInput.value.given_name;
-  }
-  if (formInput.value.family_name !== initialFormInput.family_name) {
-    changedFields.family_name = formInput.value.family_name;
-  }
-  if (formInput.value.email !== initialFormInput.email) {
-    changedFields.email = formInput.value.email;
-  }
-  if (formInput.value.mobile !== initialFormInput.mobile) {
-    changedFields.mobile = formInput.value.mobile;
-  }
-  return changedFields;
+const isEmailEditable = computed(() => auth_method === "email");
+
+/**
+ * Function to get the fields that have been changed in the form.
+ * It compares the current form input values with the initial form input values.
+ * If a value has changed, it adds that field to the changedFields object.
+ */
+function getChangedFields(): Partial<typeof initialFormInput> {
+  return Object.keys(initialFormInput).reduce((changedFields, key) => {
+    const typedKey = key as keyof typeof initialFormInput;
+    if (formInput.value[typedKey] !== initialFormInput[typedKey]) {
+      changedFields[typedKey] = formInput.value[typedKey];
+    }
+    return changedFields;
+  }, {} as Partial<typeof initialFormInput>);
 }
 
 async function handleSubmit(event: FormSubmitEvent<Schema>) {
-  console.log("submitting");
   isSubmitting.value = true;
   const changedFields = getChangedFields();
+
   try {
-    await $fetch("/api/users/update", {
+    const data = await $fetch("/api/users/update", {
       method: "PUT",
       body: { id: user.value?.id, ...changedFields },
     });
+
+    if (data) {
+      Object.assign(user.value, data);
+      forceRerender();
+    }
+
     toast.add({
       title: "Success",
       description: "Your details have been updated successfully.",
       timeout: 5000,
     });
-  } catch (e) {
-    if (
-      (e as any).response &&
-      (e as any).response._data &&
-      (e as any).response._data.message
-    ) {
-      errorMessage.value = (e as any).response._data.message;
-      toast.add({
-        title: "Error",
-        description: (e as any).response._data.message,
-        timeout: 0,
-        color: "red",
-      });
-    } else {
-      errorMessage.value = "An unexpected error occurred. Please try again.";
-    }
+  } catch (error) {
+    const errorMessageText =
+      error?.response?._data?.message ||
+      "An unexpected error occurred. Please try again.";
+    errorMessage.value = errorMessageText;
+
+    toast.add({
+      title: "Error",
+      description: errorMessageText,
+      timeout: error?.response?._data?.message ? 0 : 5000,
+      color: "red",
+    });
   } finally {
     isSubmitting.value = false;
   }
@@ -122,7 +128,11 @@ async function handleSubmit(event: FormSubmitEvent<Schema>) {
           />
         </UFormGroup>
         <UFormGroup label="Email *" name="email">
-          <UInput v-model="formInput.email" size="lg" />
+          <UInput
+            v-model="formInput.email"
+            size="lg"
+            :disabled="!isEmailEditable"
+          />
         </UFormGroup>
         <UFormGroup label="Contact number" name="contact-number">
           <UInput

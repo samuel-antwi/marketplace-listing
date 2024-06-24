@@ -26,6 +26,7 @@ export const lucia = new Lucia(adapter, {
       email_verified: attributes.email_verified,
       name: attributes.name,
       picture: attributes.picture,
+      auth_method: attributes.auth_method,
     };
   },
 });
@@ -48,6 +49,7 @@ interface DatabaseUserAttributes {
   email_verified: boolean;
   name: string;
   picture: string;
+  auth_method: string;
 }
 
 const runtimeConfig = useRuntimeConfig();

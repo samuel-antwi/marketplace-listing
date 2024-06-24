@@ -4,6 +4,8 @@ import Avatar from "./Avatar.vue";
 import { useUser } from "~/composables/Auth/auth";
 import { useForceRender } from "~/composables/Global/useForceRender";
 
+const user = useUser();
+
 const accountRoutes = [
   {
     title: "My Details",
@@ -30,12 +32,16 @@ const accountRoutes = [
     icon: "i-mdi-heart-outline",
     to: "/my-account/favourites",
   },
-  {
-    title: "Change Password",
-    description: "Change your password",
-    icon: "i-mdi-lock-outline",
-    to: "/my-account/change-password",
-  },
+  ...(user.value?.auth_method === "email"
+    ? [
+        {
+          title: "Change Password",
+          description: "Change your password",
+          icon: "i-mdi-lock-outline",
+          to: "/my-account/change-password",
+        },
+      ]
+    : []),
 ];
 
 const isLoading = ref(false);
@@ -58,7 +64,7 @@ async function logout() {
 
 <template>
   <div>
-    <avatar />
+    <avatar :key="componentKey" />
     <div class="shadow-md">
       <div
         class="hover:bg-gray-100 bg-white"

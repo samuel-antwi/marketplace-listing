@@ -34,7 +34,6 @@
   "devDependencies": {
     "@formkit/nuxt": "latest",
     "@nuxt/ui": "latest",
-    "@nuxtjs/supabase": "latest",
     "@vueuse/nuxt": "latest"
   }
 }

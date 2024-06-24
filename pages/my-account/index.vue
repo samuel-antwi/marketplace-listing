@@ -6,8 +6,6 @@ definePageMeta({
 
 const route = useRoute();
 
-console.log(route);
-
 const isMyAccountPage = computed(() => {
   return route.name === "my-account";
 });
