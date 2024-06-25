@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { User } from "lucia";
+import MobileSearch from "~/components/global/MobileSearch.vue";
 
 const { $supabase } = useNuxtApp();
 
@@ -23,5 +24,6 @@ onMounted(() => {});
   <NuxtLayout>
     <NuxtPage />
     <UNotifications />
+    <mobile-search />
   </NuxtLayout>
 </template>
