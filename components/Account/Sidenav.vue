@@ -21,7 +21,7 @@ const accountRoutes = [
     to: "/my-account/my-ads",
   },
   {
-    title: "Your Message",
+    title: "Messages",
     description: "View or respond to messages from Sellers and Buyers",
     icon: "i-mdi-email-outline",
     to: "/my-account/messages",
