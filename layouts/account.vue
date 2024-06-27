@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Sidenav from "../components/Account/Sidenav.vue";
-import NavBar from "~/components/global/NavBar.vue";
+import NavBar from "@/components/global/navigation/NavBar.vue";
 </script>
 
 <template>

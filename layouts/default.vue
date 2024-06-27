@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import NavBar from "~/components/global/NavBar.vue";
+import NavBar from "@/components/global/navigation/NavBar.vue";
 </script>
 
 <template>
   <div>
-    <NavBar />
+    <nav-bar />
     <UContainer class="mt-12">
       <slot></slot>
     </UContainer>

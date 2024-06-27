@@ -1,4 +1,4 @@
-export default eventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   if (!event.context.session) {
     throw createError({
       statusCode: 403,
@@ -10,4 +10,5 @@ export default eventHandler(async (event) => {
     "Set-Cookie",
     lucia.createBlankSessionCookie().serialize()
   );
+  event.context.session = null; // Set session to null to immediately reflect logout
 });

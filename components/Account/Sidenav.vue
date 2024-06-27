@@ -3,8 +3,10 @@ import NavLink from "../global/NavLink.vue";
 import Avatar from "./Avatar.vue";
 import { useUser } from "~/composables/Auth/auth";
 import { useForceRender } from "~/composables/Global/useForceRender";
+import { useLogout } from "@/composables/Auth/useLogout";
 
 const user = useUser();
+const { logout } = useLogout();
 
 const accountRoutes = [
   {
@@ -46,20 +48,6 @@ const accountRoutes = [
 
 const isLoading = ref(false);
 const { componentKey } = useForceRender();
-
-async function logout() {
-  isLoading.value = true;
-  try {
-    await $fetch("/api/auth/logout", {
-      method: "POST",
-    });
-    await navigateTo("/logout");
-  } catch (e) {
-    console.error(e);
-  } finally {
-    isLoading.value = false;
-  }
-}
 </script>
 
 <template>
@@ -91,3 +79,4 @@ async function logout() {
 <style scoped>
 /* You can add additional custom styles here if needed */
 </style>
+~/composables/Auth/useLogout

@@ -7,7 +7,7 @@ import { edituserSchema } from "@/lib/schema";
 import { z } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
 import ErrorMessage from "~/components/global/ErrorMessage.vue";
-import { useForceRender } from "~/composables/Global/useForceRender";
+import type { User } from "lucia";
 
 definePageMeta({
   layout: "account",
@@ -16,6 +16,8 @@ definePageMeta({
 
 const user = useUser();
 const isSubmitting = ref(false);
+
+const userKey = computed(() => JSON.stringify(user.value));
 
 const toast = useToast();
 
@@ -30,7 +32,6 @@ const initialFormInput = { given_name, family_name, email, mobile };
 
 const formInput = ref({ ...initialFormInput });
 const errorMessage = ref<string | null>(null);
-const { forceRerender } = useForceRender();
 
 type Schema = z.output<typeof edituserSchema>;
 
@@ -65,14 +66,13 @@ async function handleSubmit(event: FormSubmitEvent<Schema>) {
   const changedFields = getChangedFields();
 
   try {
-    const data = await $fetch("/api/users/update", {
+    const data: User | null = await $fetch("/api/users/update", {
       method: "PUT",
       body: { id: user.value?.id, ...changedFields },
     });
 
     if (data) {
-      Object.assign(user.value, data);
-      forceRerender();
+      user.value = data;
     }
 
     toast.add({
@@ -99,7 +99,7 @@ async function handleSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <div>
+  <div :key="userKey">
     <header-view
       title="My Details"
       description="Feel free to edit any of your details below so your account is totally up to date. (* Indicates a required field)."
