@@ -32,20 +32,20 @@ const searchQuery = ref("");
               />
               <span>Search</span>
             </button>
+            <UButton color="white" variant="ghost">
+              <menu-drop-down />
+            </UButton>
             <NuxtLink class="flex flex-col items-center" to="/">
               <UIcon class="text-lg" name="i-mdi-plus-circle-outline" />
               <span>Sell</span>
             </NuxtLink>
             <NuxtLink
               class="hidden md:flex flex-col items-center"
-              to="/my-account"
+              to="/my-account/messages"
             >
-              <UIcon class="text-xl" name="i-mdi-user-outline" />
-              <span>Account</span>
+              <UIcon class="text-xl" name="i-mdi-email-outline" />
+              <span>Messages</span>
             </NuxtLink>
-            <button>
-              <menu-drop-down />
-            </button>
           </div>
         </div>
       </UContainer>

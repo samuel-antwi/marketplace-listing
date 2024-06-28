@@ -24,36 +24,32 @@ function getItems(user: User | null) {
       : [
           {
             label: "Sign in",
-            icon: "i-heroicons-arrow-right-on-rectangle",
+            icon: "i-mdi-sign-in",
             click: () => navigateTo("/signin"),
           },
         ],
 
     [
       {
-        label: "My account",
-        icon: "i-heroicons-user-circle",
-        click: () => navigateTo("/my-account"),
-      },
-      {
         label: "My Details",
-        icon: "i-heroicons-book-open",
+        icon: "i-mdi-account-outline",
         click: () => navigateTo("/my-account/my-details"),
       },
       {
-        label: "Help & Contact",
-        icon: "i-heroicons-question-mark-circle",
-        click: () => navigateTo("/help-and-contact"),
-      },
-      {
         label: "Manage my Ads",
-        icon: "i-heroicons-megaphone",
+        icon: "i-mdi-megaphone-outline",
         click: () => navigateTo("/my-account/my-ads"),
       },
       {
+        label: "Help & Contact",
+        icon: "i-mdi-question-mark-circle-outline",
+        click: () => navigateTo("/help-and-contact"),
+      },
+
+      {
         label: "Favorites",
-        icon: "i-heroicons-heart",
-        click: () => navigateTo("/my-account/favorites"),
+        icon: "i-mdi-heart-outline",
+        click: () => navigateTo("/my-account/favourites"),
       },
     ],
     [
@@ -61,7 +57,7 @@ function getItems(user: User | null) {
         ? [
             {
               label: "Logout",
-              icon: "i-heroicons-arrow-left-on-rectangle",
+              icon: "i-mdi-logout",
               click: () => logout(),
             },
           ]
@@ -79,7 +75,7 @@ function getItems(user: User | null) {
       item: { disabled: 'cursor-text select-text', padding: 'py-2.5' },
       width: 'w-[250px] md:w-[300px]',
     }"
-    :popper="{ placement: 'bottom-start' }"
+    :popper="{ placement: 'bottom' }"
     mode="hover"
   >
     <div class="flex flex-col items-center">
@@ -96,7 +92,7 @@ function getItems(user: User | null) {
     </template>
 
     <template #item="{ item }">
-      <UIcon :name="item.icon" class="h-4 w-4 mr-2" />
+      <UIcon :name="item.icon" class="h-6 w-6 mr-2" />
       <span class="truncate">{{ item.label }}</span>
     </template>
   </UDropdown>
