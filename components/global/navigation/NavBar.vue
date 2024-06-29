@@ -32,9 +32,9 @@ const searchQuery = ref("");
               />
               <span>Search</span>
             </button>
-            <UButton color="white" variant="ghost">
+            <button type="button">
               <menu-drop-down />
-            </UButton>
+            </button>
             <NuxtLink class="flex flex-col items-center" to="/">
               <UIcon class="text-lg" name="i-mdi-plus-circle-outline" />
               <span>Sell</span>
@@ -50,10 +50,10 @@ const searchQuery = ref("");
         </div>
       </UContainer>
     </nav>
-    <nav class="bg-gray-900 text-gray-100">
-      <UContainer>
+    <nav class="bg-[#0D475C] py-2 text-gray-100">
+      <div class="max-w-4xl mx-auto px-4">
         <category-nav />
-      </UContainer>
+      </div>
     </nav>
   </div>
 </template>
