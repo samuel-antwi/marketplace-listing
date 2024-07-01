@@ -25,7 +25,4 @@ export default defineNuxtConfig({
   ui: {
     icons: ["mdi"],
   },
-  supabase: {
-    redirect: false,
-  },
 });

@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { useUser } from "@/composables/Auth/auth";
 
-definePageMeta({
-  middleware: "auth",
-});
-
 const user = useUser();
 </script>
 

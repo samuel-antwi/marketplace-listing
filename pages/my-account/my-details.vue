@@ -8,6 +8,7 @@ import { z } from "zod";
 import type { FormSubmitEvent } from "#ui/types";
 import ErrorMessage from "~/components/global/ErrorMessage.vue";
 import type { User } from "lucia";
+import type { Category } from "@/types/category";
 
 definePageMeta({
   layout: "account",

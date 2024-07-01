@@ -7,11 +7,11 @@ definePageMeta({
 });
 
 const user = useUser();
+const route = useRoute();
 </script>
 
 <template>
   <UContainer class="mt-10">
-    <h4>Welcome back</h4>
-    <p>{{ user?.given_name }}</p>
+    <p>{{ route.params.slug }}</p>
   </UContainer>
 </template>
